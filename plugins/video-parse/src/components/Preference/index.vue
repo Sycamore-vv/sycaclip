@@ -2,6 +2,7 @@
 import { onMounted, ref, watch } from 'vue';
 import showToast from '../../utils/toast';
 import packageJson from '../../../package';
+import { getAutoOpenConfig, setAutoOpenConfig } from '../../utils/config';
 
 const props = defineProps({
   showState: {
@@ -18,6 +19,8 @@ const defaultPath = window.utools.getPath('downloads');
 
 const downloadPath = ref('');
 
+const autoOpen = ref(true);
+
 const currentTheme = ref('#0f172a');
 
 const chooseMenu = (menu) => {
@@ -30,6 +33,12 @@ const chooseMenu = (menu) => {
 const onChange = () => {
   console.log(downloadPath.value);
   window.utools.dbStorage.setItem('downloadPath', downloadPath.value);
+};
+
+const autoOpenChange = () => {
+  console.log(autoOpen.value);
+  setAutoOpenConfig(autoOpen.value);
+  showToast(autoOpen.value ? '已开启自动打开下载目录' : '已关闭自动打开下载目录');
 };
 
 const selectFolder = () => {
@@ -114,6 +123,7 @@ onMounted(() => {
   setHistory();
   currentTheme.value = window.utools.dbStorage.getItem('theme') || '#0f172a';
   document.documentElement.style.setProperty('--primary-color', currentTheme.value);
+  autoOpen.value = getAutoOpenConfig();
 });
 </script>
 <template>
@@ -177,6 +187,11 @@ onMounted(() => {
             <div class="dot" v-for="(item, index) in themeList" :key="index" :class="{ active: currentTheme === item.color }" :style="{ background: item.color }" :title="item.name" @click="changeTheme(item.color)"></div>
             <input class="color-picker dot" type="color" :value="currentTheme" @change="changeTheme($event.target.value)" title="自定义颜色" />
           </div>
+        </div>
+        <div class="setting-item auto-open">
+          <!-- 自动打开目录 -->
+          <label for="autoOpen">自动打开下载目录</label>
+          <input v-model="autoOpen" type="checkbox" id="autoOpen" @change="autoOpenChange" />
         </div>
       </div>
       <!-- 关于 -->
@@ -379,6 +394,12 @@ onMounted(() => {
       border-radius: 50%;
     }
   }
+}
+
+.auto-open {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .setting-item.download-path label {

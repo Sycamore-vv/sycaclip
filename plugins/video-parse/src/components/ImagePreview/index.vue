@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import showToast from '../../utils/toast';
+import { getAutoOpenConfig } from '../../utils/config';
 
 const props = defineProps({
   visible: {
@@ -133,9 +134,11 @@ const download = async () => {
     });
     console.log(res);
     if (res) {
-      window.utools.shellShowItemInFolder(res);
       showToast('下载成功');
       loading.value = false;
+      if (getAutoOpenConfig()) {
+        window.utools.shellShowItemInFolder(res);
+      }
     } else {
       showToast('下载失败', 'error');
       loading.value = false;

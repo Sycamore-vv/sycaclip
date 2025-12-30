@@ -4,6 +4,7 @@ import Dialog from '../components/Dialog/index.vue';
 import Preference from '../components/Preference/index.vue';
 import ImagePreview from '../components/ImagePreview/index.vue';
 import showToast from '../utils/toast';
+import { getAutoOpenConfig } from '../utils/config';
 
 defineProps({
   enterAction: {
@@ -202,12 +203,14 @@ const download = async (livePhoto) => {
     });
     console.log(res);
     if (res) {
-      window.utools.shellShowItemInFolder(res);
       showToast('下载成功');
       if (livePhoto) {
         livePhotoLoading.value = false;
       } else {
         picLoading.value = false;
+      }
+      if (getAutoOpenConfig()) {
+        window.utools.shellShowItemInFolder(res);
       }
     } else {
       showToast('下载失败', 'error');
