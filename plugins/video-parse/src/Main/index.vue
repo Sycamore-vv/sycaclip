@@ -78,6 +78,11 @@ const platformList = [
     name: '即梦',
     content: 'https://jimeng.jianying.com/s/59q6OoJtnok/'
   },
+  // {
+  //   id: 'doubao',
+  //   name: '豆包',
+  //   content: 'https://www.doubao.com/thread/w92d2f8434076e159'
+  // },
   {
     id: 'zuiyou',
     name: '最右',
@@ -470,6 +475,7 @@ const isNotEmpty = (arr, key) => {
         justify-content: space-between;
         align-items: center;
         margin: 5px 0;
+        flex-wrap: wrap;
 
         .platform-item {
           padding: 5px 10px;

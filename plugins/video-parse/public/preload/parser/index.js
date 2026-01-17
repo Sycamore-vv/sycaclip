@@ -4,6 +4,7 @@ const JiMengParser = require('./jimeng');
 const ZuiYouParser = require('./zuiyou');
 const BiliBiliParser = require('./bilibili');
 const KuaishouParser = require('./kuaishou');
+const DouBaoParser = require('./doubao');
 
 /**
  * 解析信息
@@ -22,6 +23,8 @@ async function parseInfo(sharedUrl) {
     return await new BiliBiliParser().parse(sharedUrl);
   } else if (sharedUrl.includes('kuaishou.com')) {
     return await new KuaishouParser().parse(sharedUrl);
+  } else if (sharedUrl.includes('doubao.com')) {
+    return await new DouBaoParser().parse(sharedUrl);
   } else {
     throw new Error("暂不支持该平台");
   }
