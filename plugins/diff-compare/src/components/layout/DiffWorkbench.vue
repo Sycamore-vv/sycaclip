@@ -67,12 +67,26 @@ onMounted(() => {
                     </template>
                     {{ t('imageMode') }}
                 </ZButton>
+                <ZButton variant="ghost" size="sm" :active="activeMode === 'excel'" @click="activeMode = 'excel'">
+                    <template #icon-left>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <path d="M8 13h2" />
+                            <path d="M8 17h2" />
+                            <path d="M14 13h2" />
+                            <path d="M14 17h2" />
+                        </svg>
+                    </template>
+                    {{ t('excelMode') }}
+                </ZButton>
             </div>
 
             <!-- Right: icon buttons -->
             <div class="flex items-center gap-1.5 w-24 justify-end">
                 <!-- Theme toggle -->
-                <ZTooltip
+                <ZTooltip position="bottom"
                     :content="isDark ? (locale === 'zh' ? '开启亮色' : 'Light Mode') : (locale === 'zh' ? '开启暗色' : 'Dark Mode')">
                     <ZButton variant="surface" size="md" @click="toggleTheme" class="!w-10 !h-10 !p-0">
                         <svg v-if="isDark" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
@@ -96,7 +110,7 @@ onMounted(() => {
                     </ZButton>
                 </ZTooltip>
                 <!-- Settings -->
-                <ZTooltip :content="locale === 'zh' ? '设置' : 'Settings'">
+                <ZTooltip position="bottom" :content="locale === 'zh' ? '设置' : 'Settings'">
                     <ZButton variant="surface" size="md" @click="showSettings = true" class="!w-10 !h-10 !p-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

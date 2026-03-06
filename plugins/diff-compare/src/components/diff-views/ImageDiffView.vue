@@ -6,12 +6,12 @@ import ZBadge from '@/components/ui/base/ZBadge.vue'
 import ZButton from '@/components/ui/base/ZButton.vue'
 
 const { locale, t } = useI18n()
-
+// 视图模式
 type ViewMode = 'split' | 'slider' | 'blend' | 'difference'
-
+// 图片
 const sourceImage = ref<string | null>(null)
 const targetImage = ref<string | null>(null)
-
+// 当前视图模式
 const viewMode = ref<ViewMode>('split')
 
 const leftDragOver = ref(false)
@@ -42,22 +42,39 @@ const readFile = (file: File): Promise<string> =>
 
 const handleFileInput = async (e: Event, side: 'source' | 'target') => {
     const input = e.target as HTMLInputElement
-    if (!input.files?.[0]) return
-    const url = await readFile(input.files[0])
-    if (side === 'source') sourceImage.value = url
-    else targetImage.value = url
+    const files = input.files
+    if (!files || files.length === 0) return
+
+    if (files.length >= 2) {
+        sourceImage.value = await readFile(files[0])
+        targetImage.value = await readFile(files[1])
+    } else {
+        const url = await readFile(files[0])
+        if (side === 'source') sourceImage.value = url
+        else targetImage.value = url
+    }
     input.value = ''
 }
 
 const handleDrop = async (e: DragEvent, side: 'source' | 'target') => {
     e.preventDefault()
-    if (side === 'source') leftDragOver.value = false
-    else rightDragOver.value = false
-    const file = e.dataTransfer?.files?.[0]
-    if (!file || !file.type.startsWith('image/')) return
-    const url = await readFile(file)
-    if (side === 'source') sourceImage.value = url
-    else targetImage.value = url
+    leftDragOver.value = false
+    rightDragOver.value = false
+
+    const files = e.dataTransfer?.files
+    if (!files || files.length === 0) return
+
+    const validImages = Array.from(files).filter(f => f.type.startsWith('image/'))
+    if (validImages.length === 0) return
+
+    if (validImages.length >= 2) {
+        sourceImage.value = await readFile(validImages[0])
+        targetImage.value = await readFile(validImages[1])
+    } else {
+        const url = await readFile(validImages[0])
+        if (side === 'source') sourceImage.value = url
+        else targetImage.value = url
+    }
 }
 
 const clearImages = () => {
@@ -179,10 +196,10 @@ onUnmounted(() => {
             </div>
 
             <div class="flex items-center gap-4">
-                <div v-if="bothLoaded" class="flex items-center gap-2">
+                <div class="flex items-center gap-2">
                     <ZBadge variant="surface" size="xs">{{ t('zoom') || 'Zoom' }}</ZBadge>
                     <span class="text-xs font-mono font-bold text-[var(--color-secondary)]">{{ Math.round(zoom * 100)
-                        }}%</span>
+                    }}%</span>
                 </div>
 
                 <div class="flex gap-2">
@@ -197,7 +214,7 @@ onUnmounted(() => {
                             </svg>
                         </ZButton>
                     </ZTooltip>
-                    <ZTooltip :content="t('clearImages')">
+                    <ZTooltip :content="t('clearItems')">
                         <ZButton variant="danger" size="sm" @click="clearImages"
                             :disabled="!sourceImage && !targetImage">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
@@ -207,7 +224,7 @@ onUnmounted(() => {
                                 <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                                 <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
                             </svg>
-                            {{ t('clearImages') }}
+                            {{ t('clearItems') }}
                         </ZButton>
                     </ZTooltip>
                 </div>
@@ -224,7 +241,7 @@ onUnmounted(() => {
                     <label v-if="!sourceImage" class="img-dropzone bg-checker"
                         :class="{ 'img-dropzone--active': leftDragOver }" @dragover.prevent="leftDragOver = true"
                         @dragleave="leftDragOver = false" @drop="handleDrop($event, 'source')">
-                        <input type="file" accept="image/*" class="img-file-input"
+                        <input type="file" accept="image/*" class="img-file-input" multiple
                             @change="handleFileInput($event, 'source')" />
 
                         <div class="img-dropzone-card" :class="{ 'img-dropzone-card--active': leftDragOver }">

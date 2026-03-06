@@ -274,30 +274,39 @@ const handlePaste = (side: 'source' | 'target') => {
     <div class="flex flex-col h-full gap-4">
         <!-- Toolbar -->
         <div
-            class="flex justify-between items-center px-4 py-2 bg-[var(--color-background)] shadow-sm rounded-lg border border-[var(--color-border)]">
-            <div class="flex gap-4 items-center">
+            class="h-14 border-b border-[var(--color-border)] bg-[var(--color-background)] flex items-center justify-between px-5 flex-shrink-0 z-30 shadow-sm relative w-full">
+            <div class="flex items-center gap-3">
                 <div class="flex items-center gap-2">
-                    <ZBadge variant="outline" size="md">{{ t('language') }}</ZBadge>
-                    <ZSelect v-model="selectedLang" :options="langOptions" />
+                    <ZBadge variant="surface" size="lg">{{ t('language') }}</ZBadge>
+                    <ZSelect v-model="selectedLang" :options="langOptions" class="min-w-[120px]" />
                 </div>
 
-                <div class="h-4 w-px bg-[var(--color-border)] mx-2"></div>
+                <div class="h-4 w-px bg-[var(--color-border)] mx-1"></div>
 
                 <div
-                    class="flex bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-1 shadow-sm gap-1">
-                    <ZButton variant="surface" size="sm" :active="textViewMode === 'split'"
-                        @click="textViewMode = 'split'">
+                    class="flex bg-[var(--color-surface)] rounded-md border border-[var(--color-border)] p-1 shadow-sm gap-1">
+                    <ZButton :variant="textViewMode === 'split' ? 'primary' : 'surface'" size="sm"
+                        @click="textViewMode = 'split'" class="!rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                            <line x1="12" y1="3" x2="12" y2="21" />
+                        </svg>
                         {{ t('viewSplit') }}
                     </ZButton>
-                    <ZButton variant="surface" size="sm" :active="textViewMode === 'unified'"
-                        @click="textViewMode = 'unified'">
+                    <ZButton :variant="textViewMode === 'unified' ? 'primary' : 'surface'" size="sm"
+                        @click="textViewMode = 'unified'" class="!rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                        </svg>
                         {{ t('viewUnified') }}
                     </ZButton>
                 </div>
 
-                <div class="h-4 w-px bg-[var(--color-border)] mx-2"></div>
+                <div class="h-4 w-px bg-[var(--color-border)] mx-1"></div>
 
-                <div class="flex gap-1.5">
+                <div class="flex gap-1">
                     <ZTooltip :content="t('prevChange')">
                         <ZButton variant="ghost" size="icon-sm" @click="goToChange('prev')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -318,8 +327,6 @@ const handlePaste = (side: 'source' | 'target') => {
                     </ZTooltip>
                 </div>
 
-                <div class="h-4 w-px bg-[var(--color-border)] mx-2"></div>
-
                 <ZTooltip :content="t('swapText')">
                     <ZButton variant="ghost" size="icon-sm" @click="swapTexts">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -332,15 +339,16 @@ const handlePaste = (side: 'source' | 'target') => {
                     </ZButton>
                 </ZTooltip>
             </div>
+
             <div class="flex gap-4 items-center">
                 <div v-if="isDiffing" class="flex items-center">
-                    <ZBadge variant="primary" dot pulse size="xs">
+                    <ZBadge variant="primary" dot pulse size="lg">
                         {{ t('computing') || 'Computing' }}
                     </ZBadge>
                 </div>
                 <div class="flex gap-2">
-                    <ZBadge variant="success" size="xs">+{{ addedCount }}</ZBadge>
-                    <ZBadge variant="danger" size="xs">-{{ removedCount }}</ZBadge>
+                    <ZBadge variant="success" size="lg">+{{ addedCount }}</ZBadge>
+                    <ZBadge variant="danger" size="lg">-{{ removedCount }}</ZBadge>
                 </div>
             </div>
         </div>
@@ -355,7 +363,7 @@ const handlePaste = (side: 'source' | 'target') => {
                     <div
                         class="bg-[var(--color-background)] px-3 py-2 border-b border-[var(--color-border)] flex justify-between items-center h-10">
                         <div class="flex items-center gap-2">
-                            <ZBadge variant="surface" size="xs">
+                            <ZBadge variant="surface" size="lg">
                                 <template #default>
                                     <div class="flex items-center gap-1.5">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
@@ -369,7 +377,7 @@ const handlePaste = (side: 'source' | 'target') => {
                                 </template>
                             </ZBadge>
                         </div>
-                        <ZBadge variant="primary" dot pulse size="xs">
+                        <ZBadge variant="primary" dot pulse size="lg">
                             {{ sourceLangLabel }}
                         </ZBadge>
                     </div>
@@ -419,7 +427,7 @@ const handlePaste = (side: 'source' | 'target') => {
                     <div
                         class="bg-[var(--color-background)] px-3 py-2 border-b border-[var(--color-border)] flex justify-between items-center h-10">
                         <div class="flex items-center gap-2">
-                            <ZBadge variant="surface" size="xs">
+                            <ZBadge variant="surface" size="lg">
                                 <template #default>
                                     <div class="flex items-center gap-1.5">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
@@ -433,7 +441,7 @@ const handlePaste = (side: 'source' | 'target') => {
                                 </template>
                             </ZBadge>
                         </div>
-                        <ZBadge variant="primary" dot pulse size="xs">
+                        <ZBadge variant="primary" dot pulse size="lg">
                             {{ targetLangLabel }}
                         </ZBadge>
                     </div>
@@ -483,7 +491,7 @@ const handlePaste = (side: 'source' | 'target') => {
                 class="h-full rounded-lg border border-[var(--color-border)] overflow-hidden shadow-sm bg-[var(--color-background)] flex flex-col">
                 <div
                     class="bg-[var(--color-background)] px-4 py-2 border-b border-[var(--color-border)] h-10 flex items-center">
-                    <ZBadge variant="surface" size="xs">{{ t('viewUnified') }}</ZBadge>
+                    <ZBadge variant="surface" size="lg">{{ t('viewUnified') }}</ZBadge>
                 </div>
                 <div class="flex-1 overflow-auto bg-[var(--color-background)] custom-scrollbar">
                     <div class="min-w-fit w-full font-mono text-sm leading-6 flex flex-col">

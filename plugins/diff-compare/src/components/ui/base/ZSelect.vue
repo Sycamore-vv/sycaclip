@@ -32,7 +32,7 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
     <div class="select-root" ref="selectRef">
         <!-- Trigger Button -->
         <button type="button" class="select-trigger" :class="{ 'select-trigger--open': open }" @click="toggle">
-            <span class="select-value">{{options.find(o => o.value === modelValue)?.label ?? 'Select'}}</span>
+            <span class="select-value">{{options.find(o => o.value === modelValue)?.label ?? ''}}</span>
             <svg class="select-chevron" :class="{ 'select-chevron--up': open }" xmlns="http://www.w3.org/2000/svg"
                 width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                 stroke-linecap="round" stroke-linejoin="round">

@@ -3,6 +3,7 @@ const en = {
   title: 'Diff Compare',
   textMode: 'Text Mode',
   imageMode: 'Image Mode',
+  excelMode: 'Excel Mode',
   toggleTheme: 'Toggle Theme',
   autoFormat: 'Auto-Format on Paste',
   pasteSource: 'Paste source text here...',
@@ -23,7 +24,7 @@ const en = {
   viewSlider: 'Slider View',
   viewBlend: 'Blend View',
   viewDifference: 'Diff Mode',
-  clearImages: 'Clear Content',
+  clearItems: 'Clear Content',
   nextChange: 'Next Change',
   prevChange: 'Prev Change',
   lineNo: 'Line No',
@@ -31,6 +32,16 @@ const en = {
   swapText: 'Swap Sides',
   enabled: 'Enabled',
   disabled: 'Disabled',
+  uploadExcel: 'Click or drag to upload Excel files (.xlsx, .xls, .csv)',
+  excelSource: 'Source Excel',
+  excelTarget: 'Target Excel',
+  sheet: 'Sheet',
+  diffResult: 'Diff',
+  noExcelDiff: 'No cell differences found',
+  cellDiff: 'Cell Differences',
+  cellLocation: 'Location',
+  cellOriginal: 'Original',
+  cellModified: 'Modified'
 }
 
 export default en
