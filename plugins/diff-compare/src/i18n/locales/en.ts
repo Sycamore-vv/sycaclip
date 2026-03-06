@@ -1,30 +1,17 @@
-// English translations — shape is validated by index.ts
+// English translations
 const en = {
+  // Common
   title: 'Diff Compare',
-  textMode: 'Text Mode',
-  imageMode: 'Image Mode',
-  excelMode: 'Excel Mode',
-  wordMode: 'Word Mode',
   toggleTheme: 'Toggle Theme',
-  autoFormat: 'Auto-Format on Paste',
-  pasteSource: 'Paste source text here...',
-  pasteTarget: 'Paste target text here...',
+  settings: 'Settings',
   wip: 'Work in progress...',
-  source: 'Source',
-  target: 'Target',
-  diffCount: '+ {added} added  - {removed} removed',
   language: 'Language',
   autoDetect: 'Auto Detect',
-  settings: 'Settings',
-  uploadImage: 'Click to upload image',
-  imageSource: 'Source Image',
-  imageTarget: 'Target Image',
-  noImage: 'Please upload images on both sides to compare',
-  viewSplit: 'Split View',
-  viewUnified: 'Unified View',
-  viewSlider: 'Slider View',
-  viewBlend: 'Blend View',
-  viewHighlight: 'Diff Mode',
+  source: 'Source',
+  target: 'Target',
+  added: 'Added',
+  removed: 'Removed',
+  modified: 'Modified',
   clearItems: 'Clear Content',
   nextChange: 'Next Change',
   prevChange: 'Prev Change',
@@ -33,6 +20,29 @@ const en = {
   swapText: 'Swap Sides',
   enabled: 'Enabled',
   disabled: 'Disabled',
+  viewSplit: 'Split View',
+  viewUnified: 'Unified View',
+  diffCount: '+ {added} added  - {removed} removed',
+  computingDiff: 'Computing Diff...',
+
+  // Text Diff
+  textMode: 'Text Mode',
+  autoFormat: 'Auto-Format on Paste',
+  pasteSource: 'Paste source text here...',
+  pasteTarget: 'Paste target text here...',
+
+  // Image Diff
+  imageMode: 'Image Mode',
+  uploadImage: 'Click to upload image',
+  imageSource: 'Source Image',
+  imageTarget: 'Target Image',
+  noImage: 'Please upload images on both sides to compare',
+  viewSlider: 'Slider View',
+  viewBlend: 'Blend View',
+  viewHighlight: 'Diff Mode',
+
+  // Excel Diff
+  excelMode: 'Excel Mode',
   uploadExcel: 'Click or drag to upload Excel files (.xlsx, .xls, .csv)',
   excelSource: 'Source Excel',
   excelTarget: 'Target Excel',
@@ -43,6 +53,9 @@ const en = {
   cellLocation: 'Location',
   cellOriginal: 'Original',
   cellModified: 'Modified',
+
+  // Word Diff
+  wordMode: 'Word Mode',
   uploadWord: 'Click or drag to upload Word files (.docx)',
   wordSource: 'Source Word',
   wordTarget: 'Target Word',
@@ -59,7 +72,6 @@ const en = {
   wordDiffShort: 'Diff',
   wordDiffCount: '{n} differences',
   wordDiffEmpty: 'No documents to compare yet',
-  wordDiffEmptyHint: 'Load one Word document on each side to start comparing.',
   wordDiffWaiting: 'Waiting for the other document',
   wordDiffWaitingHint: 'The diff list will appear here after both sides are loaded.',
   wordNoDiff: 'No paragraph differences found',
@@ -67,9 +79,6 @@ const en = {
   wordEmptyParagraph: 'Empty paragraph',
   wordCompareView: 'Side by Side',
   wordHighlightView: 'Highlight Diff',
-  modified: 'Modified',
-  added: 'Added',
-  removed: 'Removed'
 }
 
 export default en

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsPanel from '@/components/ui/SettingsPanel.vue'
 import ZTooltip from '@/components/ui/base/ZTooltip.vue'
 import ZButton from '@/components/ui/base/ZButton.vue'
 
-defineProps({
+const props = defineProps({
     initialMode: {
         type: String,
         default: 'text'
@@ -13,7 +13,13 @@ defineProps({
 })
 
 const { locale, t } = useI18n()
-const activeMode = ref('text')
+const activeMode = ref(props.initialMode)
+
+watch(() => props.initialMode, (newMode) => {
+    if (newMode) {
+        activeMode.value = newMode
+    }
+})
 const isDark = ref(true)
 const showSettings = ref(false)
 

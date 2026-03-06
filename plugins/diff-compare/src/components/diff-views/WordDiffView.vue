@@ -372,9 +372,6 @@ onUnmounted(() => {
             t("wordNoDiff")
           }}</span>
         </template>
-        <span v-else class="text-xs text-[var(--color-secondary)] opacity-60">{{
-          t("wordDiffEmptyHint")
-        }}</span>
         <ZTooltip :content="t('clearItems')" v-if="bothLoaded">
           <ZButton
             variant="ghost"

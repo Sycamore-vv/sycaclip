@@ -13,7 +13,8 @@ const emit = defineEmits(['close'])
 
 const langOptions = ref([
     { label: '中文', value: 'zh' },
-    { label: 'English', value: 'en' }
+    { label: 'English', value: 'en' },
+    { label: '日本語', value: 'ja' }
 ])
 
 const usageItems = computed(() => {
@@ -32,7 +33,7 @@ const usageItems = computed(() => {
         },
         {
             title: '语言设置',
-            desc: '在下方选择框中切换显示语言，当前支持中文与英文。',
+            desc: '在下方选择框中切换显示语言，当前支持中文、英文和日文。',
         },
     ]
     const en = [
@@ -50,10 +51,30 @@ const usageItems = computed(() => {
         },
         {
             title: 'Language',
-            desc: 'Use the selector below to switch the display language between Chinese and English.',
+            desc: 'Use the selector below to switch the display language between Chinese, English and Japanese.',
         },
     ]
-    return locale.value === 'zh' ? zh : en
+    const ja = [
+        {
+            title: 'テキスト比較',
+            desc: '左右のパネルに元の内容と修正後の内容を貼り付けると、差異がリアルタイムでハイライトされます。',
+        },
+        {
+            title: '画像比較',
+            desc: '2つの画像をアップロードし、中央のスライダーをドラッグして重ね合わせることで、微細な差異を正確に発見できます。',
+        },
+        {
+            title: 'テーマ切り替え',
+            desc: '右上のアイコンをクリックして、ダークモードとライトモードを切り替えることができます。',
+        },
+        {
+            title: '言語設定',
+            desc: '下のセレクターを使用して、表示言語を中国語、英語、日本語から選択できます。',
+        },
+    ]
+    if (locale.value === 'zh') return zh
+    if (locale.value === 'ja') return ja
+    return en
 })
 
 const autoFormatValue = computed({
@@ -85,9 +106,9 @@ const formatOptions = computed(() => [
                                 d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
                             <circle cx="12" cy="12" r="3" />
                         </svg>
-                        <span>{{ locale === 'zh' ? '设置' : 'Settings' }}</span>
+                        <span>{{ locale === 'zh' ? '设置' : (locale === 'ja' ? '設定' : 'Settings') }}</span>
                     </div>
-                    <button class="sp-close" @click="emit('close')" :title="locale === 'zh' ? '关闭' : 'Close'">
+                    <button class="sp-close" @click="emit('close')" :title="locale === 'zh' ? '关闭' : (locale === 'ja' ? '閉じる' : 'Close')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18" />
@@ -102,7 +123,7 @@ const formatOptions = computed(() => [
                     <!-- Language section -->
                     <section class="sp-section">
                         <p class="sp-section-label">
-                            {{ locale === 'zh' ? '显示语言' : 'Display Language' }}
+                            {{ locale === 'zh' ? '显示语言' : (locale === 'ja' ? '表示言語' : 'Display Language') }}
                         </p>
                         <ZSelect v-model="locale" :options="langOptions" />
                     </section>
@@ -120,7 +141,7 @@ const formatOptions = computed(() => [
                     <!-- Usage guide section -->
                     <section class="sp-section">
                         <p class="sp-section-label">
-                            {{ locale === 'zh' ? '使用说明' : 'How to Use' }}
+                            {{ locale === 'zh' ? '使用说明' : (locale === 'ja' ? '使い方' : 'How to Use') }}
                         </p>
                         <div class="sp-guide-list">
 

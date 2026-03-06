@@ -1,8 +1,8 @@
 {
   "$schema": "node_modules/@ztools-center/ztools-api-types/resource/ztools.schema.json",
   "name": "diff-compare",
-  "title": "diff compare",
-  "description": "A ZTools plugin",
+  "title": "对比助手",
+  "description": "多模态差异对比工具。支持文本代码、图片、Excel 表格及 Word 文档的实时对比与差异高亮。",
   "author": "Your Name",
   "version": "1.0.0",
   "main": "index.html",
@@ -13,38 +13,71 @@
   },
   "features": [
     {
-      "code": "hello",
-      "explain": "这是插件应用的第一个功能",
+      "code": "diff-main",
+      "explain": "代码对比工具，支持文本、图片、Excel、Word",
       "icon": "logo.png",
-      "cmds": ["你好", "hello"]
+      "cmds": ["对比", "diff", "代码对比", "compare"]
     },
     {
-      "code": "read",
-      "explain": "功能指令+匹配指令示例，使用 node.js 能力读文件",
+      "code": "diff-text",
+      "explain": "文本差异对比",
       "icon": "logo.png",
       "cmds": [
-        "读文件",
+        "文本对比",
         {
-          "type": "files",
-          "fileType": "file",
-          "maxLength": 1,
-          "label": "读文件"
+          "type": "over",
+          "label": "文本对比"
         }
       ]
     },
     {
-      "code": "write",
-      "explain": "匹配指令示例，使用 node.js 能力写文件",
+      "code": "diff-image",
+      "explain": "图片差异对比",
       "icon": "logo.png",
-      "mainHide": true,
       "cmds": [
-        {
-          "type": "over",
-          "label": "保存为文件"
-        },
+        "图片对比",
         {
           "type": "img",
-          "label": "保存为文件"
+          "label": "图片对比"
+        },
+        {
+          "type": "files",
+          "fileType": "file",
+          "maxLength": 2,
+          "label": "图片对比",
+          "extensions": ["png", "jpg", "jpeg", "bmp", "gif", "webp"]
+        }
+      ]
+    },
+    {
+      "code": "diff-excel",
+      "explain": "Excel 表格对比",
+      "icon": "logo.png",
+      "cmds": [
+        "Excel对比",
+        "表格对比",
+        {
+          "type": "files",
+          "fileType": "file",
+          "maxLength": 2,
+          "label": "Excel对比",
+          "extensions": ["xlsx", "xls", "csv"]
+        }
+      ]
+    },
+    {
+      "code": "diff-word",
+      "explain": "Word 文档对比",
+      "icon": "logo.png",
+      "cmds": [
+        "Word对比",
+        "文档对比",
+        {
+          "type": "files",
+          "fileType": "file",
+          "maxLength": 2,
+          "label": "Word对比",
+          "extensions": ["docx"]
         }
       ]
     }

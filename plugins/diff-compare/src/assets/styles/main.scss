@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --color-background-dark: #09090B;
-  --color-surface-dark: #111113;
-  --color-primary-dark: #F4F4F5;
-  --color-secondary-dark: #71717A;
-  --color-text-dark: #E4E4E7;
-  --color-border-dark: #27272A;
-  --color-cta-dark: #4ADE80;
+  --color-background-dark: #0F172A;
+  --color-surface-dark: #1E293B;
+  --color-primary-dark: #818CF8;
+  --color-secondary-dark: #94A3B8;
+  --color-text-dark: #F8FAFC;
+  --color-border-dark: #334155;
+  --color-cta-dark: #6366F1;
 
-  --color-delete-bg-dark: rgba(248, 113, 113, 0.15);
-  --color-delete-bg-strong-dark: rgba(248, 113, 113, 0.4);
-  --color-insert-bg-dark: rgba(74, 222, 128, 0.15);
-  --color-insert-bg-strong-dark: rgba(74, 222, 128, 0.4);
-  --color-delete-text-dark: #FCA5A5;
-  --color-insert-text-dark: #86EFAC;
+  --color-delete-bg-dark: rgba(244, 63, 94, 0.15);
+  --color-delete-bg-strong-dark: rgba(244, 63, 94, 0.35);
+  --color-insert-bg-dark: rgba(16, 185, 129, 0.15);
+  --color-insert-bg-strong-dark: rgba(16, 185, 129, 0.35);
+  --color-delete-text-dark: #FDA4AF;
+  --color-insert-text-dark: #6EE7B7;
 
   --color-background-light: #FFFFFF;
   --color-surface-light: #F8FAFC;
