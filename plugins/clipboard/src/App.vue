@@ -69,6 +69,32 @@ const handleFavoriteConfirm = async (remark) => {
   await confirmFavorite(addFavorite)
 }
 
+const showDeleteConfirm = ref(false)
+const deleteTargetItem = ref(null)
+
+const handleDeleteItem = () => {
+  deleteTargetItem.value = contextMenu.value.item
+  hideContextMenu()
+  showDeleteConfirm.value = true
+}
+
+const handleDeleteConfirm = async () => {
+  showDeleteConfirm.value = false
+  if (!deleteTargetItem.value) return
+  try {
+    await window.ztools.clipboard.delete(deleteTargetItem.value.id)
+    doReload()
+  } catch (error) {
+    console.error('删除失败:', error)
+  }
+  deleteTargetItem.value = null
+}
+
+const handleDeleteCancel = () => {
+  showDeleteConfirm.value = false
+  deleteTargetItem.value = null
+}
+
 const handleOpenFavoriteDialog = () => {
   openFavoriteDialog(contextMenu.value.item)
   hideContextMenu()
@@ -181,7 +207,9 @@ onUnmounted(() => {
       :show="contextMenu.show"
       :x="contextMenu.x"
       :y="contextMenu.y"
+      :can-favorite="contextMenu.item?.type === 'text' || contextMenu.item?.type === 'image'"
       @favorite="handleOpenFavoriteDialog"
+      @delete="handleDeleteItem"
     />
 
     <FavoriteDialog
@@ -197,6 +225,14 @@ onUnmounted(() => {
       message="确定要清空所有剪贴板记录吗？此操作不可撤销。"
       @confirm="handleClearConfirm"
       @cancel="handleClearCancel"
+    />
+
+    <ConfirmDialog
+      :show="showDeleteConfirm"
+      title="删除记录"
+      message="确定要删除这条剪贴板记录吗？"
+      @confirm="handleDeleteConfirm"
+      @cancel="handleDeleteCancel"
     />
   </div>
 </template>

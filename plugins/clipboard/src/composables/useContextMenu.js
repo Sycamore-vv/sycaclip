@@ -11,8 +11,6 @@ export function useContextMenu() {
   const showContextMenu = (event, item, activeTab) => {
     // 收藏Tab不支持右键菜单
     if (activeTab === 'favorite') return
-    // 只允许文本和图像类型收藏
-    if (item.type !== 'text' && item.type !== 'image') return
 
     event.preventDefault()
     contextMenu.value = {
