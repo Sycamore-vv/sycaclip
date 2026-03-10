@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import ZTooltip from '@/components/ui/base/ZTooltip.vue'
+import { useI18n } from 'vue-i18n'
+import ZIcon from '@/components/ui/ZIcon.vue'
+
+const { t } = useI18n();
 
 const scrollContainerRef = ref<HTMLElement | null>(null)
 defineExpose({ scrollContainer: scrollContainerRef })
@@ -11,7 +15,7 @@ export interface DiffBarItem {
     targetText?: string
 }
 
-defineProps<{
+const props = defineProps<{
     title: string
     items: DiffBarItem[]
     activeIndex?: number
@@ -40,31 +44,31 @@ defineEmits<{
                         'diff-icon--' + item.type,
                         activeIndex === idx ? 'diff-icon--active' : ''
                     ]" @click="$emit('itemClick', idx)">
-                        <svg v-if="item.type === 'modify'" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 20h9" />
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                        </svg>
-                        <svg v-else-if="item.type === 'insert' || item.type === 'added'"
-                            xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                        <svg v-else-if="item.type === 'delete' || item.type === 'removed'"
-                            xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
+                        <ZIcon v-if="item.type === 'modify'" name="edit" :size="14" />
+                        <ZIcon v-else-if="item.type === 'insert' || item.type === 'added'" name="plus" :size="14"
+                            stroke-width="3" />
+                        <ZIcon v-else-if="item.type === 'delete' || item.type === 'removed'" name="minus" :size="14"
+                            stroke-width="3" />
                     </div>
                     <template #content>
-                        <div class="p-1 px-2 text-xs max-w-[200px]">
-                            <div class="truncate" :title="item.sourceText || item.targetText">
-                                {{ item.sourceText || item.targetText }}
+                        <div class="p-1 px-2 text-xs">
+                            <div class="font-bold mb-1 opacity-70 text-center">
+                                {{ item.type === 'modify' ? t('modified') :
+                                    (item.type === 'insert' ? t('added') : t('removed')) }}
+                            </div>
+                            <div class="flex items-center gap-2 whitespace-nowrap">
+                                <!-- 修改前内容 -->
+                                <span v-if="item.sourceText" class="text-red-400 line-through">{{ item.sourceText
+                                }}</span>
+                                <!-- 箭头图标 -->
+                                <ZIcon v-if="item.type === 'modify'" name="arrow-right" :size="10" />
+                                <!-- 修改后内容 -->
+                                <span v-if="item.targetText" class="text-green-400 font-bold">{{ item.targetText
+                                    }}</span>
                             </div>
                         </div>
                     </template>
+
                 </ZTooltip>
                 <div v-else class="w-1 h-1 rounded-full bg-[var(--color-border)] opacity-40"></div>
             </div>

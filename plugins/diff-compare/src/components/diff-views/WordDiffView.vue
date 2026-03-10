@@ -8,6 +8,7 @@ import FileDropzone from "@/components/shared/FileDropzone.vue";
 import DiffBar from "@/components/shared/DiffBar.vue";
 import DiffLegend from "@/components/shared/DiffLegend.vue";
 import PrevNextButtons from "@/components/shared/PrevNextButtons.vue";
+import ZIcon from "@/components/ui/ZIcon.vue";
 import { useWordDiff } from "@/composables/useWordDiff";
 
 const { t } = useI18n();

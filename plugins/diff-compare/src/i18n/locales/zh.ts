@@ -27,6 +27,8 @@ const zh = {
 
   // Text Diff
   textMode: '文本对比',
+  textSplit: '并排对比',
+  textUnified: '合并对比',
   autoFormat: '粘贴自动格式化',
   pasteSource: '在此粘贴源内容...',
   pasteTarget: '在此粘贴目标内容...',

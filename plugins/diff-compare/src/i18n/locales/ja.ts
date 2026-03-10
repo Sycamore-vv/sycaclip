@@ -27,6 +27,8 @@ const ja = {
 
   // Text Diff
   textMode: 'テキスト比較',
+  textSplit: '並べて比較',
+  textUnified: '統合比較',
   autoFormat: '貼り付け時に自動整形',
   pasteSource: 'ここにソース内容を貼り付けてください...',
   pasteTarget: 'ここにターゲット内容を貼り付けてください...',

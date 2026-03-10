@@ -4,6 +4,7 @@ import { useI18n } from "vue-i18n";
 import ZBadge from "@/components/ui/base/ZBadge.vue";
 import ZButton from "@/components/ui/base/ZButton.vue";
 import ZTooltip from "@/components/ui/base/ZTooltip.vue";
+import ZIcon from "@/components/ui/ZIcon.vue";
 import FileDropzone from "@/components/shared/FileDropzone.vue";
 import DiffBar from "@/components/shared/DiffBar.vue";
 import DiffLegend from "@/components/shared/DiffLegend.vue";

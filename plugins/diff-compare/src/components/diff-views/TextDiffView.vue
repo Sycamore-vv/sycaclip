@@ -5,10 +5,11 @@ import ZSelect from "@/components/ui/base/ZSelect.vue";
 import ZTooltip from "@/components/ui/base/ZTooltip.vue";
 import ZButton from "@/components/ui/base/ZButton.vue";
 import ZBadge from "@/components/ui/base/ZBadge.vue";
+import ZIcon from "@/components/ui/ZIcon.vue";
 import { detectLanguage } from "@/utils/formatter";
 import { useTextDiff } from "@/composables/useTextDiff";
 import { useAutoFormat } from "@/composables/useAutoFormat";
-import { useSyntaxHighlight } from "@/composables/useSyntaxHighlight";
+import { useSyntaxHighlight, langOptions } from "@/composables/useSyntaxHighlight";
 import 'highlight.js/styles/dark.min.css'
 
 const { t } = useI18n();
@@ -42,6 +43,7 @@ const {
   highlightedTarget,
   highlightSource,
   highlightTarget,
+  highlightWithDiff,
   isSourceHighlighted,
   isTargetHighlighted,
 } = useSyntaxHighlight()
@@ -72,24 +74,12 @@ onMounted(() => {
   })
 })
 
-const langOptions = computed(() => [
-  { label: t("autoDetect"), value: "auto" },
-  { label: "JSON", value: "json" },
-  { label: "YAML", value: "yaml" },
-  { label: "HTML", value: "html" },
-  { label: "CSS", value: "css" },
-  { label: "JavaScript", value: "javascript" },
-  { label: "TypeScript", value: "typescript" },
-  { label: "Python", value: "python" },
-  { label: "C", value: "c" },
-  { label: "C++", value: "cpp" },
-  { label: "Java", value: "java" },
-  { label: "Rust", value: "rust" },
-  { label: "Go", value: "go" },
-  { label: "SQL", value: "sql" },
-  { label: "Markdown", value: "markdown" },
-  { label: "Shell", value: "shell" },
-]);
+// 使用从 useSyntaxHighlight 导出的语言选项
+const langOptionsWithI18n = computed(() => {
+  return langOptions.value.map(opt =>
+    opt.value === "auto" ? { label: t("autoDetect"), value: opt.value } : opt
+  )
+})
 
 const sourceLang = computed(() => {
   if (selectedLang.value !== "auto") return selectedLang.value;
@@ -107,6 +97,28 @@ watch([sourceText, sourceLang], ([text, lang]) => {
 
 watch([targetText, targetLang], ([text, lang]) => {
   highlightTarget(text || '', lang)
+})
+
+// 带差异高亮的源代码（按行处理）
+const diffHighlightedSource = computed(() => {
+  if (!isSourceHighlighted.value) return ''
+  const lines = sourceText.value.split('\n')
+  return lines.map((line, idx) => {
+    const diffLine = leftLines.value.find(l => l.idx === idx)
+    const diffType = diffLine?.type
+    return highlightWithDiff(line, sourceLang.value, diffType)
+  }).join('\n')
+})
+
+// 带差异高亮的目标代码（按行处理）
+const diffHighlightedTarget = computed(() => {
+  if (!isTargetHighlighted.value) return ''
+  const lines = targetText.value.split('\n')
+  return lines.map((line, idx) => {
+    const diffLine = rightLines.value.find(l => l.idx === idx)
+    const diffType = diffLine?.type
+    return highlightWithDiff(line, targetLang.value, diffType)
+  }).join('\n')
 })
 
 const getLangLabel = (langValue: string) => {
@@ -186,7 +198,7 @@ const onRightKeydown = (e: KeyboardEvent) => {
       <div class="flex items-center gap-3">
         <div class="flex items-center gap-2">
           <ZBadge variant="surface" size="lg">{{ t("language") }}</ZBadge>
-          <ZSelect v-model="selectedLang" :options="langOptions" class="min-w-[120px]" />
+          <ZSelect v-model="selectedLang" :options="langOptionsWithI18n" class="min-w-[120px]" />
         </div>
 
         <div class="h-4 w-px bg-[var(--color-border)] mx-1"></div>
@@ -194,21 +206,13 @@ const onRightKeydown = (e: KeyboardEvent) => {
         <div class="flex bg-[var(--color-surface)] rounded-md border border-[var(--color-border)] p-1 shadow-sm gap-1">
           <ZButton :variant="textViewMode === 'split' ? 'primary' : 'surface'" size="sm" @click="textViewMode = 'split'"
             class="!rounded-md">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="18" height="18" x="3" y="3" rx="2" />
-              <path d="M12 3v18" />
-            </svg>
+            <ZIcon name="split" :size="14" />
+            {{ t("textSplit") }}
           </ZButton>
           <ZButton :variant="textViewMode === 'unified' ? 'primary' : 'surface'" size="sm"
             @click="textViewMode = 'unified'" class="!rounded-md">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m16 3 4 4-4 4" />
-              <path d="M20 7H9a4 4 0 1 0 0 8h1" />
-              <path d="m8 21-4-4 4-4" />
-              <path d="M4 17h11a4 4 0 1 0 0-8h-1" />
-            </svg>
+            <ZIcon name="unified" :size="14" />
+            {{ t("textUnified") }}
           </ZButton>
         </div>
       </div>
@@ -228,19 +232,13 @@ const onRightKeydown = (e: KeyboardEvent) => {
           <ZTooltip :content="t('prevChange') || 'Previous Change'" position="bottom">
             <ZButton variant="surface" size="sm" @click="goToPrevChange" :disabled="totalChanges === 0"
               class="!w-8 !h-8 !p-0">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m15 18-6-6 6-6" />
-              </svg>
+              <ZIcon name="prev" :size="16" />
             </ZButton>
           </ZTooltip>
           <ZTooltip :content="t('nextChange') || 'Next Change'" position="bottom">
             <ZButton variant="surface" size="sm" @click="goToNextChange" :disabled="totalChanges === 0"
               class="!w-8 !h-8 !p-0">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m9 18 6-6-6-6" />
-              </svg>
+              <ZIcon name="next" :size="16" />
             </ZButton>
           </ZTooltip>
           <span v-if="totalChanges > 0" class="text-xs text-[var(--color-secondary)] ml-1 font-mono min-w-[40px]">
@@ -262,12 +260,7 @@ const onRightKeydown = (e: KeyboardEvent) => {
               <ZBadge variant="surface" size="lg">
                 <template #default>
                   <div class="flex items-center gap-1.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                      class="opacity-70">
-                      <polyline points="16 18 22 12 16 6" />
-                      <polyline points="8 6 2 12 8 18" />
-                    </svg>
+                    <Icon name="text" :size="12" class="opacity-70" />
                     {{ t("source") }}
                   </div>
                 </template>
@@ -288,11 +281,11 @@ const onRightKeydown = (e: KeyboardEvent) => {
             <!-- Diff Highlights + Textarea -->
             <div class="absolute left-10 right-0 top-0 bottom-0">
               <!-- Highlight layer -->
-              <pre 
+              <pre
                 v-if="isSourceHighlighted"
                 :ref="setSourceHighlightRef"
                 class="highlight-layer absolute inset-0 m-0 p-2 font-mono text-sm leading-6 whitespace-pre-wrap break-all pointer-events-none overflow-auto scrollbar-hide"
-                v-html="highlightedSource"
+                v-html="diffHighlightedSource"
               ></pre>
               <!-- Textarea -->
               <textarea ref="leftTextareaRef" v-model="sourceText" @scroll="onLeftScroll" @keydown="onLeftKeydown"
@@ -311,12 +304,7 @@ const onRightKeydown = (e: KeyboardEvent) => {
               <ZBadge variant="surface" size="lg">
                 <template #default>
                   <div class="flex items-center gap-1.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                      class="opacity-70">
-                      <polyline points="16 18 22 12 16 6" />
-                      <polyline points="8 6 2 12 8 18" />
-                    </svg>
+                    <Icon name="text" :size="12" class="opacity-70" />
                     {{ t("target") }}
                   </div>
                 </template>
@@ -337,11 +325,11 @@ const onRightKeydown = (e: KeyboardEvent) => {
             <!-- Diff Highlights + Textarea -->
             <div class="absolute left-10 right-0 top-0 bottom-0">
               <!-- Highlight layer -->
-              <pre 
+              <pre
                 v-if="isTargetHighlighted"
                 :ref="setTargetHighlightRef"
                 class="highlight-layer absolute inset-0 m-0 p-2 font-mono text-sm leading-6 whitespace-pre-wrap break-all pointer-events-none overflow-auto scrollbar-hide"
-                v-html="highlightedTarget"
+                v-html="diffHighlightedTarget"
               ></pre>
               <!-- Textarea -->
               <textarea ref="rightTextareaRef" v-model="targetText" @scroll="onRightScroll" @keydown="onRightKeydown"
@@ -496,5 +484,17 @@ const onRightKeydown = (e: KeyboardEvent) => {
     color: #61afef;
     text-decoration: underline;
   }
+}
+
+:deep(.diff-line-delete) {
+  background-color: rgba(224, 108, 117, 0.2);
+  display: block;
+  width: 100%;
+}
+
+:deep(.diff-line-insert) {
+  background-color: rgba(152, 195, 121, 0.2);
+  display: block;
+  width: 100%;
 }
 </style>

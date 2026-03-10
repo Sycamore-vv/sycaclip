@@ -3,6 +3,7 @@ import { useI18n } from "vue-i18n";
 import ZTooltip from "@/components/ui/base/ZTooltip.vue";
 import ZBadge from "@/components/ui/base/ZBadge.vue";
 import ZButton from "@/components/ui/base/ZButton.vue";
+import ZIcon from "@/components/ui/ZIcon.vue";
 import FileDropzone from "@/components/shared/FileDropzone.vue";
 import { useImageDiff } from "@/composables/useImageDiff";
 
@@ -40,41 +41,22 @@ const {
         :class="{ 'pointer-events-none opacity-50': !bothLoaded }">
         <ZButton :variant="viewMode === 'split' ? 'primary' : 'surface'" size="sm" @click="viewMode = 'split'"
           class="!rounded-md">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-            <line x1="12" y1="3" x2="12" y2="21" />
-          </svg>
+          <ZIcon name="split" :size="14" />
           {{ t("viewSplit") }}
         </ZButton>
         <ZButton :variant="viewMode === 'slider' ? 'primary' : 'surface'" size="sm" @click="viewMode = 'slider'"
           class="!rounded-md">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 2v20" />
-            <path d="m7 16-4-4 4-4" />
-            <path d="M13 2v20" />
-            <path d="m17 8 4 4-4 4" />
-          </svg>
+          <ZIcon name="slider" :size="14" />
           {{ t("viewSlider") }}
         </ZButton>
         <ZButton :variant="viewMode === 'blend' ? 'primary' : 'surface'" size="sm" @click="viewMode = 'blend'"
           class="!rounded-md">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="10" cy="10" r="7" />
-            <circle cx="14" cy="14" r="7" />
-          </svg>
+          <ZIcon name="blend" :size="14" />
           {{ t("viewBlend") }}
         </ZButton>
         <ZButton :variant="viewMode === 'highlight' ? 'primary' : 'surface'" size="sm" @click="viewMode = 'highlight'"
           class="!rounded-md">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <circle cx="12" cy="12" r="6" />
-            <circle cx="12" cy="12" r="2" />
-          </svg>
+          <ZIcon name="highlight" :size="14" />
           {{ t("viewHighlight") || "Highlight" }}
         </ZButton>
       </div>
@@ -89,21 +71,12 @@ const {
           <ZTooltip :content="t('resetZoom')">
             <ZButton variant="surface" size="sm" @click="resetTransform" :disabled="!bothLoaded"
               class="text-[var(--color-cta)]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                <path d="M3 3v5h5" />
-              </svg>
+              <ZIcon name="refresh" :size="14" />
             </ZButton>
           </ZTooltip>
           <ZTooltip :content="t('clearItems')">
             <ZButton variant="danger" size="sm" @click="clearImages" :disabled="!sourceImage && !targetImage">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 6h18" />
-                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-              </svg>
+              <ZIcon name="trash" :size="14" />
               {{ t("clearItems") }}
             </ZButton>
           </ZTooltip>
@@ -120,12 +93,7 @@ const {
           <FileDropzone v-if="!sourceImage" side="source" :title="t('imageSource')" :hint="t('uploadImage')"
             :is-ready="!!sourceImage" accept="image/*" @change="handleFileInput($event, 'source')">
             <template #icon>
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                <circle cx="9" cy="9" r="2" />
-                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-              </svg>
+              <ZIcon name="image" :size="28" />
             </template>
           </FileDropzone>
           <div v-else
@@ -142,12 +110,7 @@ const {
           <FileDropzone v-if="!targetImage" side="target" :title="t('imageTarget')" :hint="t('uploadImage')"
             :is-ready="!!targetImage" accept="image/*" @change="handleFileInput($event, 'target')">
             <template #icon>
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                <circle cx="9" cy="9" r="2" />
-                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-              </svg>
+              <ZIcon name="image" :size="28" />
             </template>
           </FileDropzone>
           <div v-else
@@ -226,13 +189,9 @@ const {
               class="slider-handle absolute top-0 bottom-0 w-[2px] bg-[var(--color-cta)] cursor-ew-resize z-30 flex flex-col items-center justify-center transform -translate-x-1/2"
               
               :style="{ left: `${sliderPos}%` }" @mousedown.prevent="startSliderDrag">
-              <div
-                class="cursor-ew-resize w-10 h-10 rounded-full bg-[var(--color-cta)] border-2 border-[var(--color-background)] shadow-2xl flex items-center justify-center pointer-events-none text-white transition-transform hover:scale-110">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m9 18-6-6 6-6" />
-                  <path d="m15 6 6 6-6 6" />
-                </svg>
+            <div
+              class="cursor-ew-resize w-10 h-10 rounded-full bg-[var(--color-cta)] border-2 border-[var(--color-background)] shadow-2xl flex items-center justify-center pointer-events-none text-white transition-transform hover:scale-110">
+                <ZIcon name="slider-handle" :size="20" />
               </div>
             </div>
           </template>
@@ -294,13 +253,7 @@ const {
                 <div v-if="isComputingDiff"
                   class="absolute inset-0 flex items-center justify-center bg-[var(--color-background)]/50 z-20 backdrop-blur-sm">
                   <div class="flex flex-col items-center gap-2">
-                    <svg class="animate-spin h-8 w-8 text-[var(--color-cta)]" xmlns="http://www.w3.org/2000/svg"
-                      fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                      </path>
-                    </svg>
+                    <ZIcon name="loading" :size="32" class="animate-spin text-[var(--color-cta)]" />
                     <span class="text-sm font-bold opacity-70">{{ t("computing") || "Computing Diff..." }}</span>
                   </div>
                 </div>

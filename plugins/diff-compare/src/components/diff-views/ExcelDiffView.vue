@@ -5,6 +5,7 @@ import ZBadge from '@/components/ui/base/ZBadge.vue'
 import ZButton from '@/components/ui/base/ZButton.vue'
 import ZTooltip from '@/components/ui/base/ZTooltip.vue'
 import ZSelect from '@/components/ui/base/ZSelect.vue'
+import ZIcon from '@/components/ui/ZIcon.vue'
 import FileDropzone from '@/components/shared/FileDropzone.vue'
 import DiffLegend from '@/components/shared/DiffLegend.vue'
 import { useExcelDiff } from '@/composables/useExcelDiff'
@@ -85,21 +86,12 @@ const goToNextDiff = () => {
                         :class="{ 'opacity-50 pointer-events-none': !bothLoaded }">
                         <ZButton :variant="viewMode === 'split' ? 'primary' : 'surface'" size="sm"
                             @click="viewMode = 'split'" class="!rounded-md mx-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                                <line x1="12" y1="3" x2="12" y2="21" />
-                            </svg>
+                            <ZIcon name="split" :size="14" />
                             {{ t('viewSplit') }}
                         </ZButton>
                         <ZButton :variant="viewMode === 'unified' ? 'primary' : 'surface'" size="sm"
                             @click="viewMode = 'unified'" class="!rounded-md mx-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                            </svg>
+                            <ZIcon name="unified" :size="14" />
                             {{ t('viewUnified') }}
                         </ZButton>
                     </div>
@@ -121,12 +113,7 @@ const goToNextDiff = () => {
                 <ZTooltip :content="t('clearItems')">
                     <ZButton variant="danger" size="sm" @click="clearItems"
                         :disabled="!sourceWorkbook && !targetWorkbook">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 6h18" />
-                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                        </svg>
+                        <ZIcon name="trash" :size="14" />
                         {{ t('clearItems') }}
                     </ZButton>
                 </ZTooltip>
@@ -141,29 +128,13 @@ const goToNextDiff = () => {
                 <FileDropzone side="source" :title="t('excelSource')" :hint="t('uploadExcel')"
                     :is-ready="!!sourceWorkbook" accept=".xlsx,.xls,.csv" @change="handleFile($event, 'source')">
                     <template #icon>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <path d="M8 13h2" />
-                            <path d="M8 17h2" />
-                            <path d="M14 13h2" />
-                            <path d="M14 17h2" />
-                        </svg>
+                        <ZIcon name="excel" :size="28" />
                     </template>
                 </FileDropzone>
                 <FileDropzone side="target" :title="t('excelTarget')" :hint="t('uploadExcel')"
                     :is-ready="!!targetWorkbook" accept=".xlsx,.xls,.csv" @change="handleFile($event, 'target')">
                     <template #icon>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <path d="M8 13h2" />
-                            <path d="M8 17h2" />
-                            <path d="M14 13h2" />
-                            <path d="M14 17h2" />
-                        </svg>
+                        <ZIcon name="excel" :size="28" />
                     </template>
                 </FileDropzone>
             </div>
@@ -183,11 +154,7 @@ const goToNextDiff = () => {
                                         :class="{ 'col-header--active': activeCell?.col === (c - 1) }">
                                         <div class="flex items-center justify-center gap-1.5 px-2 h-full">
                                             <span>{{ getColumnName(c - 1) }}</span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"
-                                                stroke-linecap="round" stroke-linejoin="round" class="opacity-20">
-                                                <path d="m6 9 6 6 6-6" />
-                                            </svg>
+                                            <ZIcon name="chevron-down" :size="8" class="opacity-20" />
                                         </div>
                                     </th>
                                 </tr>
@@ -240,12 +207,7 @@ const goToNextDiff = () => {
                                             :class="{ 'col-header--active': activeCell?.col === (c - 1) }">
                                             <div class="flex items-center justify-center gap-1.5 px-2 h-full">
                                                 <span>{{ getColumnName(c - 1) }}</span>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="opacity-20">
-                                                    <path d="m6 9 6 6 6-6" />
-                                                </svg>
+                                                <ZIcon name="chevron-down" :size="8" class="opacity-20" />
                                             </div>
                                         </th>
                                     </tr>
@@ -293,27 +255,13 @@ const goToNextDiff = () => {
                                             activeCell?.row === (r - 1) ? 'diff-icon--active' : ''
                                         ]" @click="scrollToCell(r - 1, getRowDiff(r - 1)?.col || 0)">
                                             <template v-if="getRowDiff(r - 1)?.type === 'modified'">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M12 20h9" />
-                                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                                                </svg>
+                                                <ZIcon name="edit" :size="14" />
                                             </template>
                                             <template v-else-if="getRowDiff(r - 1)?.type === 'added'">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                                    <line x1="12" y1="5" x2="12" y2="19" />
-                                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                                </svg>
+                                                <ZIcon name="plus" :size="14" />
                                             </template>
                                             <template v-else-if="getRowDiff(r - 1)?.type === 'removed'">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                                </svg>
+                                                <ZIcon name="minus" :size="14" />
                                             </template>
                                         </div>
                                         <template #content>
@@ -326,13 +274,8 @@ const goToNextDiff = () => {
                                                     <span v-if="getRowDiff(r - 1)?.source"
                                                         class="text-red-400 line-through">{{ getRowDiff(r - 1)?.source
                                                         }}</span>
-                                                    <svg v-if="getRowDiff(r - 1)?.type === 'modified'"
-                                                        xmlns="http://www.w3.org/2000/svg" width="10" height="10"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M5 12h14" />
-                                                        <path d="m12 5 7 7-7 7" />
-                                                    </svg>
+                                                    <ZIcon v-if="getRowDiff(r - 1)?.type === 'modified'"
+                                                        name="arrow-right" :size="10" />
                                                     <span v-if="getRowDiff(r - 1)?.target"
                                                         class="text-green-400 font-bold">{{ getRowDiff(r - 1)?.target
                                                         }}</span>
@@ -384,12 +327,7 @@ const goToNextDiff = () => {
                             class="h-12 flex items-center justify-between px-4 border-b border-[var(--color-border)] bg-[var(--color-background)]">
                             <h3 class="font-bold text-sm">{{ t('cellDiff') }}</h3>
                             <ZButton variant="ghost" size="icon-sm" @click="showDiffPanel = false">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M18 6 6 18" />
-                                    <path d="m6 6 12 12" />
-                                </svg>
+                                <ZIcon name="x" :size="16" />
                             </ZButton>
                         </div>
                         <div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
@@ -414,12 +352,7 @@ const goToNextDiff = () => {
                                         diff.source }}</div>
                                     <div class="text-xs truncate italic opacity-40 mx-auto" v-else>Empty</div>
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                        stroke-linejoin="round" class="opacity-30">
-                                        <path d="M5 12h14" />
-                                        <path d="m12 5 7 7-7 7" />
-                                    </svg>
+                                    <ZIcon name="arrow-right" :size="10" class="opacity-30" />
 
                                     <div class="text-xs truncate font-bold" v-if="diff.target">{{ diff.target }}</div>
                                     <div class="text-xs truncate italic opacity-40" v-else>Empty</div>

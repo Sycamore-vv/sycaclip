@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import ZIcon from '@/components/ui/ZIcon.vue'
 
 const props = defineProps<{
     modelValue: string
@@ -33,11 +34,7 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
         <!-- Trigger Button -->
         <button type="button" class="select-trigger" :class="{ 'select-trigger--open': open }" @click="toggle">
             <span class="select-value">{{options.find(o => o.value === modelValue)?.label ?? ''}}</span>
-            <svg class="select-chevron" :class="{ 'select-chevron--up': open }" xmlns="http://www.w3.org/2000/svg"
-                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <ZIcon class="select-chevron" :class="{ 'select-chevron--up': open }" name="chevron-down" :size="14" />
         </button>
 
         <!-- Dropdown Menu -->
@@ -49,11 +46,7 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
                         <span class="select-option-indicator"></span>
                         <span class="select-option-label">{{ opt.label }}</span>
                         <!-- Checkmark for selected -->
-                        <svg v-if="opt.value === modelValue" class="select-check" xmlns="http://www.w3.org/2000/svg"
-                            width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
+                        <ZIcon v-if="opt.value === modelValue" class="select-check" name="check" :size="13" />
                     </button>
                 </div>
             </div>

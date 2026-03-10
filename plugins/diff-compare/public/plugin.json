@@ -2,7 +2,7 @@
   "$schema": "node_modules/@ztools-center/ztools-api-types/resource/ztools.schema.json",
   "name": "diff-compare",
   "title": "对比助手",
-  "description": "多模态差异对比工具。支持文本代码、图片、Excel 表格及 Word 文档的实时对比与差异高亮。",
+  "description": "多模态差异对比工具。支持文本代码、图片、Excel 表格、Word 文档及 PDF 文档的实时对比与差异高亮。",
   "author": "Your Name",
   "version": "1.0.0",
   "main": "index.html",
@@ -14,7 +14,7 @@
   "features": [
     {
       "code": "diff-main",
-      "explain": "代码对比工具，支持文本、图片、Excel、Word",
+      "explain": "代码对比工具，支持文本、图片、Excel、Word、PDF",
       "icon": "logo.png",
       "cmds": ["对比", "diff", "代码对比", "compare"]
     },
@@ -78,6 +78,21 @@
           "maxLength": 2,
           "label": "Word对比",
           "extensions": ["docx"]
+        }
+      ]
+    },
+    {
+      "code": "diff-pdf",
+      "explain": "PDF 文档对比",
+      "icon": "logo.png",
+      "cmds": [
+        "PDF对比",
+        {
+          "type": "files",
+          "fileType": "file",
+          "maxLength": 2,
+          "label": "PDF对比",
+          "extensions": ["pdf"]
         }
       ]
     }

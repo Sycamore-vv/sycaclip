@@ -27,6 +27,8 @@ const en = {
 
   // Text Diff
   textMode: 'Text Mode',
+  textSplit:"Split View",
+  textUnified:"Unified View",
   autoFormat: 'Auto-Format on Paste',
   pasteSource: 'Paste source text here...',
   pasteTarget: 'Paste target text here...',
