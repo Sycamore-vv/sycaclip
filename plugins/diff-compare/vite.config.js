@@ -26,5 +26,18 @@ export default defineConfig({
         autoprefixer()
       ]
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'pdf-lib': ['pdfjs-dist'],
+          'word-lib': ['mammoth'],
+          'excel-lib': ['xlsx'],
+          'ocr-lib': ['tesseract.js'],
+          'highlight-lib': ['highlight.js']
+        }
+      }
+    }
   }
 })
