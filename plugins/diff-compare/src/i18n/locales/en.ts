@@ -101,6 +101,25 @@ const en = {
   zoomIn: 'Zoom in',
   zoomOut: 'Zoom out',
   zoomReset: 'Reset zoom',
+
+  // Settings Panel Usage Guide
+  usageGuide: 'How to Use',
+  usageTextTitle: 'Text Compare',
+  usageTextDesc: 'Paste source and target content on both sides — differences are highlighted in real-time.',
+  usageImageTitle: 'Image Compare',
+  usageImageDesc: 'Upload two images, then drag the center slider to overlay and compare them precisely.',
+  usageExcelTitle: 'Excel Compare',
+  usageExcelDesc: 'Upload two Excel files — cells are compared row by row and column by column with highlighting.',
+  usageWordTitle: 'Word Compare',
+  usageWordDesc: 'Upload two Word documents to detect text, formatting and paragraph changes with review marks.',
+  usagePdfTitle: 'PDF Compare',
+  usagePdfDesc: 'Upload two PDF files — uses OCR to recognize text in image-based PDFs for comparison.',
+  usageThemeTitle: 'Theme',
+  usageThemeDesc: 'Click the top-right icon to switch between system, light and dark mode to suit your environment.',
+  usageLanguageTitle: 'Language',
+  usageLanguageDesc: 'Use the selector below to switch the display language between Chinese, English and Japanese.',
+  usageAutoFormatTitle: 'Auto Format',
+  usageAutoFormatDesc: 'When enabled, automatically formats input text with immediate or delayed mode options.',
 }
 
 export default en

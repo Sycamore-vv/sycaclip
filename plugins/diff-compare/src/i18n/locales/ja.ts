@@ -101,6 +101,25 @@ const ja = {
   zoomIn: '拡大',
   zoomOut: '縮小',
   zoomReset: 'ズームをリセット',
+
+  // Settings Panel Usage Guide
+  usageGuide: '使い方',
+  usageTextTitle: 'テキスト比較',
+  usageTextDesc: '左右のパネルに元の内容と修正後の内容を貼り付けると、差異がリアルタイムでハイライトされます。',
+  usageImageTitle: '画像比較',
+  usageImageDesc: '2つの画像をアップロードし、中央のスライダーをドラッグして重ね合わせることで、微細な差異を正確に発見できます。',
+  usageExcelTitle: 'Excel 比較',
+  usageExcelDesc: '2つの Excel ファイルをアップロードすると、セルを行ごとに列ごとに比較し、ハイライト表示されます。',
+  usageWordTitle: 'Word 比較',
+  usageWordDesc: '2つの Word ドキュメントをアップロードし、文字、書式、段落の変更を校訂マーク付きで検出します。',
+  usagePdfTitle: 'PDF 比較',
+  usagePdfDesc: '2つの PDF ファイルをアップロードし、OCR を使用して画像ベースの PDF のテキストを認識して比較します。',
+  usageThemeTitle: 'テーマ切り替え',
+  usageThemeDesc: '右上のアイコンをクリックして、システム、ダークモード、ライトモードを切り替えることができます。',
+  usageLanguageTitle: '言語設定',
+  usageLanguageDesc: '下のセレクターを使用して、表示言語を中国語、英語、日本語から選択できます。',
+  usageAutoFormatTitle: '自動フォーマット',
+  usageAutoFormatDesc: '有効にすると、テキスト入力を自動的に整理し、即時または遅延モードでフォーマットします。',
 }
 
 export default ja

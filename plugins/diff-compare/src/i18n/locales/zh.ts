@@ -101,6 +101,25 @@ const zh = {
   zoomIn: '放大',
   zoomOut: '缩小',
   zoomReset: '重置缩放',
+
+  // Settings Panel Usage Guide
+  usageGuide: '使用说明',
+  usageTextTitle: '文本对比',
+  usageTextDesc: '分别在两侧面板输入原始内容和修改后内容，系统自动实时高亮增删差异行。',
+  usageImageTitle: '图片对比',
+  usageImageDesc: '上传两张图片后，左右拖动居中滑块即可叠加对比，精准发现细微差异。',
+  usageExcelTitle: 'Excel 对比',
+  usageExcelDesc: '上传两个 Excel 文件，系统逐行逐列对比单元格内容差异，并高亮显示。',
+  usageWordTitle: 'Word 对比',
+  usageWordDesc: '上传两个 Word 文档，精准识别文字、格式和段落变化，支持审阅标记。',
+  usagePdfTitle: 'PDF 对比',
+  usagePdfDesc: '上传两个 PDF 文件，基于 OCR 识别图片型 PDF 文字并进行对比。',
+  usageThemeTitle: '主题切换',
+  usageThemeDesc: '点击右上角图标在系统、浅色与深色模式间切换，适应不同工作环境。',
+  usageLanguageTitle: '语言设置',
+  usageLanguageDesc: '在下方选择框中切换显示语言，当前支持中文、英文和日文。',
+  usageAutoFormatTitle: '自动格式化',
+  usageAutoFormatDesc: '开启后输入文本自动整理格式，支持立即生效或延迟生效模式。',
 }
 
 export default zh

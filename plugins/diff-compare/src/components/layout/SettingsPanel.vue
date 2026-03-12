@@ -27,69 +27,6 @@ const langOptions = ref([
     { label: '日本語', value: 'ja' }
 ])
 
-/**
- * 使用说明列表（根据当前语言动态返回）
- */
-const usageItems = computed(() => {
-    const zh = [
-        {
-            title: '文本对比',
-            desc: '分别在两侧面板输入原始内容和修改后内容，系统自动实时高亮增删差异行。',
-        },
-        {
-            title: '图片对比',
-            desc: '上传两张图片后，左右拖动居中滑块即可叠加对比，精准发现细微差异。',
-        },
-        {
-            title: '主题切换',
-            desc: '点击右上角图标在暗色与亮色模式间切换，适应不同工作环境。',
-        },
-        {
-            title: '语言设置',
-            desc: '在下方选择框中切换显示语言，当前支持中文、英文和日文。',
-        },
-    ]
-    const en = [
-        {
-            title: 'Text Compare',
-            desc: 'Paste source and target content on both sides — differences are highlighted in real-time.',
-        },
-        {
-            title: 'Image Compare',
-            desc: 'Upload two images, then drag the center slider to overlay and compare them precisely.',
-        },
-        {
-            title: 'Theme',
-            desc: 'Click the top-right icon to switch between dark and light mode to suit your environment.',
-        },
-        {
-            title: 'Language',
-            desc: 'Use the selector below to switch the display language between Chinese, English and Japanese.',
-        },
-    ]
-    const ja = [
-        {
-            title: 'テキスト比較',
-            desc: '左右のパネルに元の内容と修正後の内容を貼り付けると、差異がリアルタイムでハイライトされます。',
-        },
-        {
-            title: '画像比較',
-            desc: '2つの画像をアップロードし、中央のスライダーをドラッグして重ね合わせることで、微細な差異を正確に発見できます。',
-        },
-        {
-            title: 'テーマ切り替え',
-            desc: '右上のアイコンをクリックして、ダークモードとライトモードを切り替えることができます。',
-        },
-        {
-            title: '言語設定',
-            desc: '下のセレクターを使用して、表示言語を中国語、英語、日本語から選択できます。',
-        },
-    ]
-    if (locale.value === 'zh') return zh
-    if (locale.value === 'ja') return ja
-    return en
-})
-
 const autoFormatValue = computed({
     get: () => autoFormat.value,
     set: (v) => { setAutoFormat(v) }
@@ -146,7 +83,7 @@ const formatOptions = computed(() => [
                     <!-- Usage guide section -->
                     <section class="sp-section">
                         <p class="sp-section-label">
-                            {{ locale === 'zh' ? '使用说明' : (locale === 'ja' ? '使い方' : 'How to Use') }}
+                            {{ t('usageGuide') }}
                         </p>
                         <div class="sp-guide-list">
 
@@ -156,8 +93,8 @@ const formatOptions = computed(() => [
                                     <ZIcon name="text" :size="15" />
                                 </div>
                                 <div class="sp-guide-text">
-                                    <p class="sp-guide-title">{{ usageItems[0].title }}</p>
-                                    <p class="sp-guide-desc">{{ usageItems[0].desc }}</p>
+                                    <p class="sp-guide-title">{{ t('usageTextTitle') }}</p>
+                                    <p class="sp-guide-desc">{{ t('usageTextDesc') }}</p>
                                 </div>
                             </div>
 
@@ -167,8 +104,41 @@ const formatOptions = computed(() => [
                                     <ZIcon name="image" :size="15" />
                                 </div>
                                 <div class="sp-guide-text">
-                                    <p class="sp-guide-title">{{ usageItems[1].title }}</p>
-                                    <p class="sp-guide-desc">{{ usageItems[1].desc }}</p>
+                                    <p class="sp-guide-title">{{ t('usageImageTitle') }}</p>
+                                    <p class="sp-guide-desc">{{ t('usageImageDesc') }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Excel Compare -->
+                            <div class="sp-guide-item">
+                                <div class="sp-guide-icon-wrap sp-guide-icon-wrap--green">
+                                    <ZIcon name="excel" :size="15" />
+                                </div>
+                                <div class="sp-guide-text">
+                                    <p class="sp-guide-title">{{ t('usageExcelTitle') }}</p>
+                                    <p class="sp-guide-desc">{{ t('usageExcelDesc') }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Word Compare -->
+                            <div class="sp-guide-item">
+                                <div class="sp-guide-icon-wrap sp-guide-icon-wrap--blue">
+                                    <ZIcon name="word" :size="15" />
+                                </div>
+                                <div class="sp-guide-text">
+                                    <p class="sp-guide-title">{{ t('usageWordTitle') }}</p>
+                                    <p class="sp-guide-desc">{{ t('usageWordDesc') }}</p>
+                                </div>
+                            </div>
+
+                            <!-- PDF Compare -->
+                            <div class="sp-guide-item">
+                                <div class="sp-guide-icon-wrap sp-guide-icon-wrap--red">
+                                    <ZIcon name="pdf" :size="15" />
+                                </div>
+                                <div class="sp-guide-text">
+                                    <p class="sp-guide-title">{{ t('usagePdfTitle') }}</p>
+                                    <p class="sp-guide-desc">{{ t('usagePdfDesc') }}</p>
                                 </div>
                             </div>
 
@@ -178,8 +148,8 @@ const formatOptions = computed(() => [
                                     <ZIcon name="moon" :size="15" />
                                 </div>
                                 <div class="sp-guide-text">
-                                    <p class="sp-guide-title">{{ usageItems[2].title }}</p>
-                                    <p class="sp-guide-desc">{{ usageItems[2].desc }}</p>
+                                    <p class="sp-guide-title">{{ t('usageThemeTitle') }}</p>
+                                    <p class="sp-guide-desc">{{ t('usageThemeDesc') }}</p>
                                 </div>
                             </div>
 
@@ -189,8 +159,19 @@ const formatOptions = computed(() => [
                                     <ZIcon name="globe" :size="15" />
                                 </div>
                                 <div class="sp-guide-text">
-                                    <p class="sp-guide-title">{{ usageItems[3].title }}</p>
-                                    <p class="sp-guide-desc">{{ usageItems[3].desc }}</p>
+                                    <p class="sp-guide-title">{{ t('usageLanguageTitle') }}</p>
+                                    <p class="sp-guide-desc">{{ t('usageLanguageDesc') }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Auto Format -->
+                            <div class="sp-guide-item">
+                                <div class="sp-guide-icon-wrap sp-guide-icon-wrap--purple">
+                                    <ZIcon name="edit" :size="15" />
+                                </div>
+                                <div class="sp-guide-text">
+                                    <p class="sp-guide-title">{{ t('usageAutoFormatTitle') }}</p>
+                                    <p class="sp-guide-desc">{{ t('usageAutoFormatDesc') }}</p>
                                 </div>
                             </div>
 
@@ -367,6 +348,11 @@ const formatOptions = computed(() => [
     &--green {
         background: rgba(16, 185, 129, 0.15);
         color: #10b981;
+    }
+
+    &--red {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
     }
 }
 
