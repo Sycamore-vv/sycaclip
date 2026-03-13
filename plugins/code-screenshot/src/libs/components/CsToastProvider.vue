@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { toastStore } from '@/libs/toast'
+/**
+ * 提示消息容器组件
+ * 负责渲染所有提示消息，使用 Teleport 传送到 body
+ */
+import { useToast } from '@/libs/toast'
 import CsToast from '@/libs/components/CsToast.vue'
+
+const toastStore = useToast()
 </script>
 
 <template>

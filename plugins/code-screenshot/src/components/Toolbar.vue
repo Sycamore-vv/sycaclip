@@ -1,25 +1,41 @@
 <script setup lang="ts">
+/**
+ * 工具栏组件
+ * 提供主题选择、背景开关、暗色模式、边距调整、语言选择和清空功能
+ */
 import { computed } from 'vue'
-import { state, BG_GRADIENTS, SUPPORTED_LANGUAGES } from '@/store'
+import { state, BG_GRADIENTS, SUPPORTED_LANGUAGES, loadCode } from '@/store'
 import { useToast } from '@/libs/toast'
 import CsSelect from '@/libs/components/CsSelect.vue'
 import CsSwitch from '@/libs/components/CsSwitch.vue'
 import CsButton from '@/libs/components/CsButton.vue'
-import { Trash2 } from 'lucide-vue-next'
+import { Trash2, Clipboard } from 'lucide-vue-next'
 
-// Map BG_GRADIENTS for CsSelect
+// 将背景渐变转换为选择器选项格式
 const themeOptions = computed(() =>
   BG_GRADIENTS.map(g => ({ ...g, label: g.name }))
 )
 
+// 提示消息钩子
 const toast = useToast()
 
+/**
+ * 设置代码窗口边距
+ * @param p - 边距值（像素）
+ */
 const setPadding = (p: number) => {
   state.padding = p
 }
 
+/**
+ * 清空代码内容
+ * 重置代码为空字符串，语言设为自动检测
+ */
 const clearCode = () => {
+  // 清除代码
   state.code = ''
+  // 修改语言为自动检测
+  state.language = 'auto'
   toast.success('已清空内容')
 }
 </script>

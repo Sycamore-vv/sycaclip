@@ -1,13 +1,23 @@
 <script setup lang="ts">
+/**
+ * 开关切换组件
+ * 用于布尔值切换，支持启用/禁用状态
+ */
+// 组件属性
 const props = defineProps<{
-  modelValue: boolean
-  disabled?: boolean
+  modelValue: boolean  // 开关状态（v-model 绑定）
+  disabled?: boolean  // 是否禁用
 }>()
 
+// 组件事件
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
+  (e: 'update:modelValue', value: boolean): void  // 状态更新事件
 }>()
 
+/**
+ * 切换开关状态
+ * 如果未禁用，则切换布尔值
+ */
 const toggle = () => {
   if (!props.disabled) emit('update:modelValue', !props.modelValue)
 }

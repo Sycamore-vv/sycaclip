@@ -1,3 +1,7 @@
+/**
+ * 构建后处理脚本
+ * 用于清理 plugin.json 中的开发环境配置
+ */
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -5,6 +9,10 @@ import { fileURLToPath } from 'node:url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const pluginJsonPath = path.resolve(__dirname, '../dist/plugin.json')
 
+/**
+ * 清理 plugin.json
+ * 移除开发环境配置，准备生产环境部署
+ */
 function cleanPluginJson() {
   if (!fs.existsSync(pluginJsonPath)) {
     console.error('Error: dist/plugin.json not found.')

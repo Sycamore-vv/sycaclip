@@ -19,6 +19,7 @@ JavaScript, TypeScript, Python, Java, Go, Rust, C/C++, C#, PHP, Ruby, Swift, Kot
 ### 灵活输入
 - 直接输入代码
 - 拖拽代码文件自动识别语言
+- 读取系统剪贴板代码
 
 ### 多种导出方式
 - 导出为 PNG 图片

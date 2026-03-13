@@ -1,21 +1,34 @@
 <script setup lang="ts">
+/**
+ * 下拉选择器组件
+ * 支持自定义选项模板、单选、点击外部关闭等功能
+ */
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { ChevronUp, Check } from 'lucide-vue-next'
 
+// 组件属性
 const props = defineProps<{
-  options: { id: string | number; label: string;[key: string]: any }[]
-  modelValue: string | number
-  placeholder?: string
+  options: { id: string | number; label: string;[key: string]: any }[]  // 选项列表
+  modelValue: string | number  // 当前选中的值（v-model 绑定）
+  placeholder?: string  // 占位文本
 }>()
 
+// 组件事件
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | number): void
+  (e: 'update:modelValue', value: string | number): void  // 值更新事件
 }>()
 
+// 下拉菜单是否展开
 const isOpen = ref(false)
+// 组件根元素引用
 const selectRef = ref<HTMLElement | null>(null)
+// 下拉菜单滚动区域引用
 const scrollRef = ref<HTMLElement | null>(null)
 
+/**
+ * 切换下拉菜单展开状态
+ * 展开时自动滚动到已选中的选项
+ */
 const toggleOpen = async () => {
   isOpen.value = !isOpen.value
   if (isOpen.value) {
@@ -30,11 +43,21 @@ const toggleOpen = async () => {
   }
 }
 
+/**
+ * 选择选项
+ * 触发更新事件并关闭下拉菜单
+ * @param id - 选中的选项 ID
+ */
 const selectOption = (id: string | number) => {
   emit('update:modelValue', id)
   isOpen.value = false
 }
 
+/**
+ * 处理点击外部事件
+ * 点击选择器外部时关闭下拉菜单
+ * @param e - 鼠标事件对象
+ */
 const handleClickOutside = (e: MouseEvent) => {
   if (selectRef.value && !selectRef.value.contains(e.target as Node)) {
     isOpen.value = false
@@ -44,11 +67,19 @@ const handleClickOutside = (e: MouseEvent) => {
 onMounted(() => document.addEventListener('click', handleClickOutside))
 onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 
+/**
+ * 获取当前选中的选项标签
+ * @returns 当前选中项的显示文本，如果没有选中则返回占位符
+ */
 const currentLabel = () => {
   const selected = props.options.find(o => o.id === props.modelValue)
   return selected ? selected.label : (props.placeholder || 'Select')
 }
 
+/**
+ * 获取当前选中的选项对象
+ * @returns 当前选中的选项对象
+ */
 const currentOption = () => {
   return props.options.find(o => o.id === props.modelValue)
 }

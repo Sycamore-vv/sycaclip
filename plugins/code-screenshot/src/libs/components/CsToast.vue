@@ -1,17 +1,27 @@
 <script setup lang="ts">
+/**
+ * 提示消息组件
+ * 单个提示消息的展示，支持不同类型（success, error, warning, info）
+ */
 import { computed } from 'vue'
 import { CheckCircle2, XCircle, AlertCircle, Info, X } from 'lucide-vue-next'
 import type { ToastType } from '@/libs/toast'
 
+// 组件属性
 const props = defineProps<{
-  message: string
-  type: ToastType
+  message: string    // 消息文本
+  type: ToastType   // 消息类型
 }>()
 
+// 组件事件
 const emit = defineEmits<{
-  (e: 'close'): void
+  (e: 'close'): void  // 关闭消息事件
 }>()
 
+/**
+ * 根据消息类型获取对应的图标组件
+ * @returns 对应类型的图标组件
+ */
 const icon = computed(() => {
   switch (props.type) {
     case 'success': return CheckCircle2

@@ -2,11 +2,22 @@ import { ref, shallowRef, watch } from 'vue'
 import { createHighlighter, type HighlighterCore } from 'shiki'
 import { state, SUPPORTED_LANGUAGES, detectLanguage, LANGUAGE_ALIASES } from '../store'
 
+/**
+ * Shiki 语法高亮 composable
+ * 封装 Shiki 高亮器的初始化和代码高亮逻辑
+ */
 export function useShiki() {
+  // Shiki 高亮器实例（使用 shallowRef 避免深度响应）
   const highlighter = shallowRef<HighlighterCore | null>(null)
+  // 高亮器是否已加载完成
   const isLoaded = ref(false)
+  // 高亮后的 HTML 代码
   const highlightedHtml = ref('')
 
+  /**
+   * 初始化 Shiki 高亮器
+   * 异步加载支持的语言和主题
+   */
   const initShiki = async () => {
     isLoaded.value = false
     try {
@@ -22,6 +33,10 @@ export function useShiki() {
     }
   }
 
+  /**
+   * 更新代码高亮结果
+   * 根据当前语言和主题设置，使用 Shiki 生成高亮 HTML
+   */
   const updateHighlight = () => {
     if (!highlighter.value || !isLoaded.value) {
       highlightedHtml.value = escapeHtml(state.code)
@@ -59,6 +74,12 @@ export function useShiki() {
     }
   }
 
+  /**
+   * HTML 字符转义
+   * 将特殊字符转换为 HTML 实体，防止 XSS 攻击
+   * @param unsafe - 未经转义的字符串
+   * @returns 转义后的安全字符串
+   */
   const escapeHtml = (unsafe: string) => {
     return unsafe
       .replace(/&/g, "&amp;")
@@ -70,6 +91,7 @@ export function useShiki() {
 
   initShiki()
 
+  // 监听状态变化，自动更新高亮
   watch([() => state.code, () => state.language, () => state.theme], () => {
     updateHighlight()
   })

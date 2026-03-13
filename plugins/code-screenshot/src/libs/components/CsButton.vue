@@ -1,15 +1,25 @@
 <script setup lang="ts">
+/**
+ * 通用按钮组件
+ * 支持多种变体（primary, secondary, danger 等）和尺寸
+ */
+// 组件属性定义
 const props = defineProps<{
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'success' | 'warning' | 'info' | 'outline' | 'link'
-  size?: 'sm' | 'md' | 'lg'
-  iconOnly?: boolean
-  disabled?: boolean
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'success' | 'warning' | 'info' | 'outline' | 'link'  // 按钮样式变体
+  size?: 'sm' | 'md' | 'lg'  // 按钮尺寸
+  iconOnly?: boolean  // 是否仅显示图标
+  disabled?: boolean  // 是否禁用
 }>()
 
+// 组件事件定义
 const emit = defineEmits<{
-  (e: 'click', event: MouseEvent): void
+  (e: 'click', event: MouseEvent): void  // 点击事件
 }>()
 
+/**
+ * 处理按钮点击事件
+ * @param e - 鼠标事件对象
+ */
 const handleClick = (e: MouseEvent) => {
   if (!props.disabled) emit('click', e)
 }

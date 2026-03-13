@@ -1,14 +1,21 @@
 <script setup lang="ts">
+/**
+ * 关于弹窗组件
+ * 展示应用信息、功能特性、技术栈等内容
+ */
 import { X, Palette, Code2, Download, Zap, Heart, Sparkles, Monitor } from 'lucide-vue-next'
 
+// 组件属性
 defineProps<{
-  show: boolean
+  show: boolean  // 是否显示弹窗
 }>()
 
+// 组件事件
 const emit = defineEmits<{
-  (e: 'close'): void
+  (e: 'close'): void  // 关闭弹窗事件
 }>()
 
+// 功能特性列表
 const features = [
   {
     icon: Code2,
@@ -36,6 +43,7 @@ const features = [
   }
 ]
 
+// 技术栈列表
 const techStack = [
   { name: 'Vue 3', color: '#42b883', icon: 'V' },
   { name: 'TypeScript', color: '#3178c6', icon: 'TS' },

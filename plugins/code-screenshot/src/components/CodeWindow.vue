@@ -1,20 +1,34 @@
 <script setup lang="ts">
+/**
+ * 代码窗口组件
+ * 负责显示代码编辑器和语法高亮结果，支持拖拽调整窗口宽度
+ */
 import { computed, ref } from 'vue'
 import { state, BG_GRADIENTS } from '@/store'
 import { useShiki } from '@/composables/useShiki'
 
+// 获取 Shiki 语法高亮结果
 const { isLoaded, highlightedHtml } = useShiki()
 
+// 获取当前选中的背景渐变
 const currentGradient = computed(() => {
   return BG_GRADIENTS.find(g => g.id === state.backgroundId) || BG_GRADIENTS[0]
 })
 
+// 文本域引用
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
-// --- Resizing Logic ---
+// --- 窗口宽度调整逻辑 ---
+// 自定义宽度，'auto' 表示自动宽度
 const customWidth = ref<number | 'auto'>('auto')
+// 是否正在拖拽调整大小
 const isDragging = ref(false)
 
+/**
+ * 开始拖拽调整窗口宽度
+ * @param e - 鼠标事件对象
+ * @param direction - 调整方向，'left' 或 'right'
+ */
 const startDrag = (e: MouseEvent, direction: 'left' | 'right') => {
   e.preventDefault()
   isDragging.value = true
@@ -42,11 +56,15 @@ const startDrag = (e: MouseEvent, direction: 'left' | 'right') => {
   document.addEventListener('mouseup', onMouseUp)
 }
 
+/**
+ * 重置为自动宽度
+ */
 const autoWidth = () => {
   customWidth.value = 'auto'
 }
 
-// Ensure textarea never scrolls internally to prevent visual desync.
+// 锁定内部滚动，防止视觉不同步
+// 文本域滚动时保持光标位置视觉一致
 const lockInternalScroll = (e: Event) => {
   const target = e.target as HTMLTextAreaElement
   if (target.scrollTop > 0) target.scrollTop = 0

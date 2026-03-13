@@ -1,6 +1,11 @@
+/**
+ * 代码截图应用状态管理模块
+ * 管理代码内容、语言检测、主题、背景等全局状态
+ */
 import { ref, reactive, watch } from 'vue'
 import hljs from 'highlight.js/lib/core'
 
+// 导入 highlight.js 语言支持模块
 import javascript from 'highlight.js/lib/languages/javascript'
 import typescript from 'highlight.js/lib/languages/typescript'
 import python from 'highlight.js/lib/languages/python'
@@ -29,6 +34,7 @@ import graphql from 'highlight.js/lib/languages/graphql'
 import xml from 'highlight.js/lib/languages/xml'
 import vue from 'highlight.js/lib/languages/xml'
 
+// 注册 highlight.js 支持的语言
 hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('typescript', typescript)
 hljs.registerLanguage('python', python)
@@ -57,6 +63,12 @@ hljs.registerLanguage('graphql', graphql)
 hljs.registerLanguage('xml', xml)
 hljs.registerLanguage('vue', vue)
 
+/**
+ * 自动检测代码语言
+ * 使用 highlight.js 的自动检测功能来确定代码的编程语言
+ * @param code - 要检测的代码字符串
+ * @returns 检测到的语言标识符，如果无法检测则返回 null
+ */
 export function detectLanguage(code: string): string | null {
   const result = hljs.highlightAuto(code, [
     'javascript', 'typescript', 'python', 'java', 'csharp', 'cpp', 'c',
@@ -67,6 +79,10 @@ export function detectLanguage(code: string): string | null {
   return result.language || null
 }
 
+/**
+ * 支持的编程语言列表
+ * 包含语言标识符和显示标签，用于语言选择器
+ */
 export const SUPPORTED_LANGUAGES = [
   { id: 'auto', label: '自动检测' },
   { id: 'typescript', label: 'TypeScript' },
@@ -123,6 +139,10 @@ export const SUPPORTED_LANGUAGES = [
   { id: 'text', label: 'Plain Text' },
 ]
 
+/**
+ * 语言别名映射表
+ * 将常见的文件扩展名和语言别名映射到标准语言标识符
+ */
 export const LANGUAGE_ALIASES: Record<string, string> = {
   'ts': 'typescript',
   'js': 'javascript',
@@ -144,6 +164,96 @@ export const LANGUAGE_ALIASES: Record<string, string> = {
   'txt': 'text',
 }
 
+/**
+ * 加载代码到应用状态
+ * 根据文件名自动检测语言，并设置代码内容和语言
+ * @param text - 代码文本内容
+ * @param filename - 可选的文件名，用于语言检测
+ */
+export function loadCode(text: string, filename?: string) {
+  state.code = text
+  if (filename) state.filename = filename
+
+  let finalLang = state.language
+  let languageSet = false
+
+  // Attempt language detection from extension
+  if (filename) {
+    const extMatch = filename.match(/\.([^.]+)$/)
+    if (extMatch) {
+      const ext = extMatch[1].toLowerCase()
+      const extMap: Record<string, string> = {
+        'ts': 'typescript', 'tsx': 'typescript',
+        'js': 'javascript', 'jsx': 'javascript', 'mjs': 'javascript', 'cjs': 'javascript',
+        'vue': 'vue',
+        'html': 'html', 'htm': 'html',
+        'css': 'css', 'scss': 'scss', 'sass': 'scss', 'less': 'css',
+        'java': 'java',
+        'py': 'python',
+        'cpp': 'cpp', 'cxx': 'cpp', 'cc': 'cpp', 'c': 'cpp', 'h': 'cpp', 'hpp': 'cpp', 'c++': 'cpp',
+        'go': 'go',
+        'rs': 'rust',
+        'json': 'json', 'jsonc': 'json', 'json5': 'json',
+        'sql': 'sql',
+        'md': 'markdown', 'mdx': 'markdown',
+        'rb': 'ruby',
+        'php': 'php',
+        'swift': 'swift',
+        'kt': 'kotlin', 'kts': 'kotlin',
+        'cs': 'csharp',
+        'scala': 'scala',
+        'sh': 'bash', 'bash': 'bash', 'zsh': 'bash',
+        'ps1': 'powershell', 'psm1': 'powershell',
+        'dockerfile': 'dockerfile',
+        'yml': 'yaml', 'yaml': 'yaml',
+        'xml': 'xml',
+        'graphql': 'graphql', 'gql': 'graphql',
+        'svelte': 'svelte',
+        'dart': 'dart',
+        'ex': 'elixir', 'exs': 'elixir',
+        'erl': 'erlang',
+        'hs': 'haskell',
+        'lua': 'lua',
+        'pl': 'perl', 'pm': 'perl',
+        'r': 'r',
+        'jl': 'julia',
+        'm': 'matlab',
+        'gradle': 'java',
+        'toml': 'toml',
+        'ini': 'ini',
+        'diff': 'diff', 'patch': 'diff',
+        'cfg': 'nginx', 'conf': 'nginx',
+      }
+
+      const mappedLangId = extMap[ext] || LANGUAGE_ALIASES[ext]
+      if (mappedLangId && SUPPORTED_LANGUAGES.some(lang => lang.id === mappedLangId)) {
+        finalLang = mappedLangId
+        languageSet = true
+      }
+    }
+  }
+
+  // Auto-detect language if set to auto or no language was detected from extension
+  if (finalLang === 'auto' || !languageSet) {
+    const detected = detectLanguage(text)
+    if (detected && SUPPORTED_LANGUAGES.some(lang => lang.id === detected)) {
+      finalLang = detected
+    } else if (detected && LANGUAGE_ALIASES[detected]) {
+      finalLang = LANGUAGE_ALIASES[detected]
+    } else if (state.language !== 'auto') {
+      // Keep manual selection if not auto
+    } else {
+      finalLang = 'plaintext'
+    }
+  }
+
+  state.language = finalLang
+}
+
+/**
+ * 背景渐变样式列表
+ * 提供多种预设的背景渐变效果，用于代码截图的背景
+ */
 export const BG_GRADIENTS = [
   // ── Originals ──────────────────────────────────────────────────────────────
   { id: 'breeze', name: 'Breeze', colors: 'linear-gradient(140deg, rgb(207, 47, 152), rgb(106, 61, 236))' },
@@ -186,9 +296,53 @@ export const BG_GRADIENTS = [
   { id: 'none', name: 'Transparent', colors: 'transparent' },
 ]
 
+// 本地存储键名
 const STORAGE_KEY = 'code-screenshot-settings'
 
-const defaultState = {
+/**
+ * 应用状态类型定义
+ * 定义代码截图工具的所有可配置状态属性
+ */
+type CsState = {
+  /**
+   * 当前代码内容
+   */
+  code: string
+  /**
+   * 文件名（用于显示和语言检测）
+   */
+  filename: string
+  /**
+   * 当前编程语言
+   */
+  language: string
+  /**
+   * 语法高亮主题
+   */
+  theme: string
+  /**
+   * 是否使用暗色模式
+   */
+  darkMode: boolean
+  /**
+   * 是否显示背景
+   */
+  showBackground: boolean
+  /**
+   * 背景渐变ID
+   */
+  backgroundId: string
+  /**
+   * 边距大小（像素）
+   */
+  padding: number
+}
+
+/**
+ * 默认状态值
+ * 应用初始化时的默认配置
+ */
+const defaultState: CsState = {
   code: 'console.log("Hello, World!");',
   filename: 'Untitled.ts',
   language: 'auto',
@@ -199,10 +353,15 @@ const defaultState = {
   padding: 64,
 }
 
-// Load from localStorage
-const savedState = JSON.parse((window.ztools ? window.ztools.dbStorage.getItem(STORAGE_KEY) : localStorage.getItem(STORAGE_KEY)) || '{}')
+// 从本地存储加载保存的设置
+// 支持两种存储方式：浏览器 localStorage 或 ztools 插件的 dbStorage
+const savedState: CsState = JSON.parse((window.ztools ? window.ztools.dbStorage.getItem(STORAGE_KEY) : localStorage.getItem(STORAGE_KEY)) || '{}')
 
-export const state = reactive({
+/**
+ * 全局响应式状态
+ * 包含所有应用配置，会自动持久化到本地存储
+ */
+export const state = reactive<CsState>({
   ...defaultState,
   ...savedState,
   // Ensure transient data isn't overwritten if we want to keep them fresh, 
@@ -214,7 +373,8 @@ export const state = reactive({
   padding: savedState.padding ?? defaultState.padding,
 })
 
-// Persistence logic
+// 状态持久化逻辑
+// 监听状态变化并自动保存到本地存储
 watch(
   () => ({
     darkMode: state.darkMode,
@@ -233,7 +393,7 @@ watch(
   { deep: true }
 )
 
-// Auto update Shiki theme based on dark mode
+// 监听暗色模式变化，自动切换 Shiki 语法高亮主题
 watch(() => state.darkMode, (isDark) => {
   state.theme = isDark ? 'github-dark' : 'github-light'
 }, { immediate: true })

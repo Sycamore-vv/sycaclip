@@ -1,22 +1,33 @@
 <script setup lang="ts">
+/**
+ * 代码截图应用主组件
+ * 处理文件拖拽、粘贴、导出等功能
+ */
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { toPng, toSvg } from 'html-to-image'
 import CodeWindow from '@/components/CodeWindow.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import { Info, ChevronDown, Download, FileCode2, ImageDown, FileType2, Clipboard, Check } from 'lucide-vue-next'
-import { state, SUPPORTED_LANGUAGES, LANGUAGE_ALIASES, detectLanguage } from '@/store'
+import { state, SUPPORTED_LANGUAGES, LANGUAGE_ALIASES, detectLanguage, loadCode } from '@/store'
 import CsButton from '@/libs/components/CsButton.vue'
 import AboutModal from '@/components/AboutModal.vue'
 import CsToastProvider from '@/libs/components/CsToastProvider.vue'
 import { useToast } from '@/libs/toast'
 
+// 提示消息钩子
 const toast = useToast()
+// 关于弹窗显示状态
 const showAbout = ref(false)
+// 是否正在拖拽文件
 const isDraggingFile = ref(false)
+// 导出菜单显示状态
 const showExportMenu = ref(false)
+// 复制完成状态
 const copyDone = ref(false)
+// 导出菜单 DOM 引用
 const exportMenuRef = ref<HTMLElement | null>(null)
 
+// 监听暗色模式变化，切换主题类
 watch(() => state.darkMode, (isDark) => {
   if (isDark) {
     document.documentElement.classList.remove('light-theme')
@@ -25,6 +36,11 @@ watch(() => state.darkMode, (isDark) => {
   }
 }, { immediate: true })
 
+/**
+ * 处理拖拽进入事件
+ * 检测是否有文件被拖入，启用拖拽覆盖层
+ * @param e - 拖拽事件对象
+ */
 const handleDragOver = (e: DragEvent) => {
   e.preventDefault()
   if (e.dataTransfer?.types.includes('Files')) {
@@ -32,6 +48,11 @@ const handleDragOver = (e: DragEvent) => {
   }
 }
 
+/**
+ * 处理拖拽离开事件
+ * 当拖拽离开窗口时，隐藏拖拽覆盖层
+ * @param e - 拖拽事件对象
+ */
 const handleDragLeave = (e: DragEvent) => {
   e.preventDefault()
   // Ensure we are actually leaving the window
@@ -40,6 +61,11 @@ const handleDragLeave = (e: DragEvent) => {
   }
 }
 
+/**
+ * 处理文件拖放事件
+ * 读取拖放的代码文件并加载到应用中
+ * @param e - 拖放事件对象
+ */
 const handleDrop = async (e: DragEvent) => {
   e.preventDefault()
   isDraggingFile.value = false
@@ -49,84 +75,18 @@ const handleDrop = async (e: DragEvent) => {
 
   try {
     const text = await file.text()
-    state.code = text
-    state.filename = file.name
-
-    // Attempt language detection from extension
-    const extMatch = file.name.match(/\.([^.]+)$/)
-    let languageSet = false
-    if (extMatch) {
-      const ext = extMatch[1].toLowerCase()
-
-      const extMap: Record<string, string> = {
-        'ts': 'typescript', 'tsx': 'typescript',
-        'js': 'javascript', 'jsx': 'javascript', 'mjs': 'javascript', 'cjs': 'javascript',
-        'vue': 'vue',
-        'html': 'html', 'htm': 'html',
-        'css': 'css', 'scss': 'scss', 'sass': 'scss', 'less': 'css',
-        'java': 'java',
-        'py': 'python',
-        'cpp': 'cpp', 'cxx': 'cpp', 'cc': 'cpp', 'c': 'cpp', 'h': 'cpp', 'hpp': 'cpp', 'c++': 'cpp',
-        'go': 'go',
-        'rs': 'rust',
-        'json': 'json', 'jsonc': 'json', 'json5': 'json',
-        'sql': 'sql',
-        'md': 'markdown', 'mdx': 'markdown',
-        'rb': 'ruby',
-        'php': 'php',
-        'swift': 'swift',
-        'kt': 'kotlin', 'kts': 'kotlin',
-        'cs': 'csharp',
-        'scala': 'scala',
-        'sh': 'bash', 'bash': 'bash', 'zsh': 'bash',
-        'ps1': 'powershell', 'psm1': 'powershell',
-        'dockerfile': 'dockerfile',
-        'yml': 'yaml', 'yaml': 'yaml',
-        'xml': 'xml',
-        'graphql': 'graphql', 'gql': 'graphql',
-        'svelte': 'svelte',
-        'dart': 'dart',
-        'ex': 'elixir', 'exs': 'elixir',
-        'erl': 'erlang',
-        'hs': 'haskell',
-        'lua': 'lua',
-        'pl': 'perl', 'pm': 'perl',
-        'r': 'r',
-        'jl': 'julia',
-        'm': 'matlab',
-        'gradle': 'gradle',
-        'toml': 'toml',
-        'ini': 'ini',
-        'diff': 'diff', 'patch': 'diff',
-        'cfg': 'nginx', 'conf': 'nginx',
-      }
-
-      const mappedLangId = extMap[ext] || LANGUAGE_ALIASES[ext]
-      if (mappedLangId && SUPPORTED_LANGUAGES.some(lang => lang.id === mappedLangId)) {
-        state.language = mappedLangId
-        languageSet = true
-      }
-    }
-
-    // Auto-detect language if set to auto or no language was detected from extension
-    if (state.language === 'auto' || !languageSet) {
-      const detected = detectLanguage(text)
-      if (detected && SUPPORTED_LANGUAGES.some(lang => lang.id === detected)) {
-        state.language = detected
-      } else if (detected && LANGUAGE_ALIASES[detected]) {
-        state.language = LANGUAGE_ALIASES[detected]
-      } else if (state.language !== 'auto') {
-        // Keep the manually selected language if not auto
-      } else {
-        state.language = 'plaintext'
-      }
-    }
+    loadCode(text, file.name)
   } catch (err) {
     console.error('Failed to read dragged file:', err)
     toast.error('读取失败，请重试')
   }
 }
 
+/**
+ * 导出代码截图
+ * 将代码窗口导出为 PNG 或 SVG 格式的图片
+ * @param format - 导出格式，'png' 或 'svg'
+ */
 const handleExport = async (format: 'png' | 'svg') => {
   showExportMenu.value = false
   const node = document.querySelector('.export-target') as HTMLElement
@@ -164,6 +124,10 @@ const handleExport = async (format: 'png' | 'svg') => {
   }
 }
 
+/**
+ * 复制图片到剪贴板
+ * 将代码截图直接复制到系统剪贴板
+ */
 const copyToClipboard = async () => {
   showExportMenu.value = false
   const node = document.querySelector('.export-target') as HTMLElement
@@ -193,14 +157,68 @@ const copyToClipboard = async () => {
   }
 }
 
+/**
+ * 关闭导出菜单
+ * 点击菜单外部时关闭导出下拉菜单
+ * @param e - 鼠标事件对象
+ */
 const closeExportMenu = (e: MouseEvent) => {
   if (exportMenuRef.value && !exportMenuRef.value.contains(e.target as Node)) {
     showExportMenu.value = false
   }
 }
 
+/**
+ * 处理全局粘贴事件
+ * 监听系统粘贴事件，支持粘贴代码文件或纯文本
+ * @param e - 剪贴板事件对象
+ */
+const handleGlobalPaste = async (e: ClipboardEvent) => {
+  // If user is focused on an input or textarea, let the default behavior happen 
+  // UNLESS it's a file paste which we want to handle specifically.
+  const target = e.target as HTMLElement
+  const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA'
+
+  const items = e.clipboardData?.items
+  if (!items) return
+
+  let hasFile = false
+  for (const item of items) {
+    if (item.kind === 'file') {
+      const file = item.getAsFile()
+      if (file) {
+        hasFile = true
+        try {
+          const text = await file.text()
+          loadCode(text, file.name)
+          toast.success(`已载入文件: ${file.name}`)
+          e.preventDefault() // Intercept file paste
+        } catch (err) {
+          console.error('Failed to read pasted file:', err)
+        }
+        break
+      }
+    }
+  }
+
+  // If no files and NOT in an input, handle as plain text
+  if (!hasFile && !isInput) {
+    const text = e.clipboardData?.getData('text/plain')
+    if (text) {
+      loadCode(text)
+      toast.success('已从剪贴板载入代码')
+      e.preventDefault()
+    }
+  }
+}
+
+/**
+ * 组件挂载时初始化
+ * 添加全局事件监听器
+ */
 onMounted(() => {
   document.addEventListener('click', closeExportMenu)
+  document.addEventListener('paste', handleGlobalPaste)
   if (window.ztools) {
     window.ztools.onPluginEnter((action: any) => {
     })
@@ -209,6 +227,10 @@ onMounted(() => {
   }
 })
 
+/**
+ * 组件卸载时清理
+ * 移除全局事件监听器，防止内存泄漏
+ */
 onUnmounted(() => {
   document.removeEventListener('click', closeExportMenu)
 })
