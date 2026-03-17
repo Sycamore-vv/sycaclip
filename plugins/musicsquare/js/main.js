@@ -11,7 +11,6 @@
         shortcutVolume:"音量加 / 减",
         shortcutPrevNext:"上一首 / 下一首",
         shortcutFav:"收藏 / 取消收藏当前歌曲",
-        shortcutLyricsFX:"切换歌词炫酷效果",
         shortcutMute:"静音 / 取消静音",
         shortcutFocusSearch:"聚焦搜索框",
         shortcutCloseModal:"提示：按 Esc 可以关闭弹窗。",
@@ -50,7 +49,6 @@
         toastNeedKeyword:"请先输入搜索关键词。",
         toastSearchError:"搜索时发生了一点小错误，请稍后再试。",
         toastPlayError:"播放失败，请稍后再试。",
-        toastLyricStyleSwitched:"已切换歌词炫酷效果。",
         toastDownloadNotReady:"当前歌曲还未加载完成，稍后再试。",
         toastPlaylistCreated:"歌单创建成功。",
         toastPlaylistEmpty:"当前歌单为空，先添加几首歌吧~",
@@ -82,7 +80,6 @@
         shortcutVolume:"Volume up / down",
         shortcutPrevNext:"Previous / Next track",
         shortcutFav:"Favorite / unfavorite current track",
-        shortcutLyricsFX:"Toggle lyrics FX",
         shortcutMute:"Mute / unmute",
         shortcutFocusSearch:"Focus on search box",
         shortcutCloseModal:"Tip: press Esc to close dialogs.",
@@ -121,7 +118,6 @@
         toastNeedKeyword:"Please enter a search keyword first.",
         toastSearchError:"An error occurred while searching.",
         toastPlayError:"Playback failed. Please try again.",
-        toastLyricStyleSwitched:"Lyrics FX toggled.",
         toastDownloadNotReady:"Song not fully loaded yet. Try again later.",
         toastPlaylistCreated:"Playlist created.",
         toastPlaylistEmpty:"Playlist is empty. Add some songs first.",
@@ -164,7 +160,6 @@
       currentLyricIndex:-1,
       searchInProgress:false,
       noMoreResults:false,
-      lyricsAlt:false,
       muted:false
     };
 
@@ -1607,11 +1602,6 @@
         if((e.key==='n'||e.key==='N')&&!typing)playNext('next');
         if((e.key==='p'||e.key==='P')&&!typing)playNext('prev');
         if((e.key==='f'||e.key==='F')&&!typing)toggleFavoriteCurrent();
-        if((e.key==='l'||e.key==='L')&&!typing){
-          state.lyricsAlt=!state.lyricsAlt;
-          dom.lyricsContainer.classList.toggle('alt-style',state.lyricsAlt);
-          showToast(t('toastLyricStyleSwitched'));
-        }
         if((e.key==='m'||e.key==='M')&&!typing){
           state.muted=!state.muted;
           dom.audio.muted=state.muted;
