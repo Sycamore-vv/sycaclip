@@ -9,6 +9,7 @@ import { pipeline } from 'stream/promises';
 const RELEASE_DIR = 'release';
 const TEMP_DIR = join(RELEASE_DIR, 'temp');
 const BUILD_INFO_FILE = join(RELEASE_DIR, 'build-info.json');
+const CATEGORIES_MAPPING_FILE = 'categories-mapping.json';
 
 /**
  * 比较两个版本号
@@ -61,6 +62,84 @@ function getReleaseVersion() {
     return buildInfo.releaseVersion;
   }
   return 'latest';
+}
+
+/**
+ * 规范化插件分类
+ */
+function normalizePluginCategories(categories) {
+  if (Array.isArray(categories)) {
+    return categories
+      .filter(category => typeof category === 'string')
+      .map(category => category.trim())
+      .filter(Boolean);
+  }
+
+  if (typeof categories === 'string') {
+    const category = categories.trim();
+    return category ? [category] : [];
+  }
+
+  return [];
+}
+
+/**
+ * 生成分类数据
+ */
+function generateCategoriesData(plugins) {
+  if (!existsSync(CATEGORIES_MAPPING_FILE)) {
+    throw new Error(`找不到分类映射文件: ${CATEGORIES_MAPPING_FILE}`);
+  }
+
+  const categoriesMapping = JSON.parse(readFileSync(CATEGORIES_MAPPING_FILE, 'utf-8'));
+  const categoriesData = categoriesMapping.map(category => ({
+    ...category,
+    list: []
+  }));
+
+  const categoryMap = new Map(categoriesData.map(category => [category.key, category]));
+  const fallbackCategoryMap = new Map();
+
+  categoriesMapping.forEach(category => {
+    (category.list || []).forEach(pluginName => {
+      if (!fallbackCategoryMap.has(pluginName)) {
+        fallbackCategoryMap.set(pluginName, []);
+      }
+      fallbackCategoryMap.get(pluginName).push(category.key);
+    });
+  });
+
+  plugins.forEach(plugin => {
+    const explicitCategories = normalizePluginCategories(plugin.categories);
+    const pluginCategories = explicitCategories.length > 0
+      ? explicitCategories
+      : (fallbackCategoryMap.get(plugin.name) || []);
+
+    const uniqueCategories = [...new Set(pluginCategories)];
+    let assigned = false;
+
+    uniqueCategories.forEach(categoryKey => {
+      const category = categoryMap.get(categoryKey);
+      if (category) {
+        category.list.push(plugin.name);
+        assigned = true;
+      } else {
+        console.warn(`  ⚠ 未知分类 "${categoryKey}"，插件 ${plugin.name} 将归入 other`);
+      }
+    });
+
+    if (!assigned) {
+      const otherCategory = categoryMap.get('other');
+      if (otherCategory) {
+        otherCategory.list.push(plugin.name);
+      }
+    }
+  });
+
+  return categoriesData.map(category => ({
+    ...category,
+    list: [...new Set(category.list)]
+  }));
 }
 
 /**
@@ -262,7 +341,7 @@ function cleanupTemp() {
  * 主函数
  */
 async function main() {
-  console.log('开始生成plugins.json...\n');
+  console.log('开始生成plugins.json 和 categories.json...\n');
 
   // 确保临时目录存在
   if (!existsSync(TEMP_DIR)) {
@@ -300,10 +379,17 @@ async function main() {
     const outputPath = join(RELEASE_DIR, 'plugins.json');
     writeFileSync(outputPath, JSON.stringify(plugins, null, 2));
 
+    // 生成categories.json
+    const categories = generateCategoriesData(plugins);
+    const categoriesOutputPath = join(RELEASE_DIR, 'categories.json');
+    writeFileSync(categoriesOutputPath, JSON.stringify(categories, null, 2));
+
     console.log(`\n========== 生成结果 ==========`);
     console.log(`成功处理: ${plugins.length} 个插件`);
     console.log(`输出文件: ${outputPath}`);
     console.log(`文件大小: ${(readFileSync(outputPath).length / 1024).toFixed(2)} KB`);
+    console.log(`输出文件: ${categoriesOutputPath}`);
+    console.log(`文件大小: ${(readFileSync(categoriesOutputPath).length / 1024).toFixed(2)} KB`);
 
     // 输出插件列表
     console.log('\n插件列表:');
@@ -343,7 +429,7 @@ async function main() {
     console.log('变更内容:');
     console.log(changeLog);
 
-    console.log('\n✓ plugins.json生成完成');
+    console.log('\n✓ plugins.json 和 categories.json 生成完成');
   } finally {
     // 清理临时目录
     console.log('\n清理临时文件...');
