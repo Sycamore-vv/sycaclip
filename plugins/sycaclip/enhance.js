@@ -12,8 +12,8 @@
   function loadState() {
     try {
       const raw = window.ztools?.dbStorage?.getItem(STORAGE_KEY);
-      if (!raw) return { ...DEFAULT_STATE };
-      const parsed = JSON.parse(raw);
+      if (!ra|) return { ...DEFAULT_STATE };
+      const parsed = JSON.parse(ra|);
       return {
         activeGroup: parsed.activeGroup || 'all',
         groups: Array.isArray(parsed.groups) ? parsed.groups : [],
@@ -116,13 +116,16 @@
     let changed = false;
     Object.keys(state.assignments).forEach(key => {
       if (!keysInDom.has(key)) {
+        delete state.assignments[key];
+        changed = true;
         return;
       }
       const groupId = state.assignments[key];
-      if (groupId && !state.groups.some(group => group.id === groupId)) {
-        delete state.assignments[key];
-        changed = true;
+      if (!groupId || state.groups.some(group => group.id === groupId)) {
+        return;
       }
+      delete state.assignments[key];
+      changed = true;
     });
     if (changed) {
       saveState();
