@@ -1,0 +1,137 @@
+.syca-group-panel {
+  padding: 10px 14px 12px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: grid;
+  gap: 10px;
+}
+
+.syca-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.syca-group-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.syca-group-selected {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.syca-group-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.syca-group-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover-light);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.18s ease;
+}
+
+.syca-group-chip:hover {
+  color: var(--text-primary);
+  border-color: var(--primary-color);
+}
+
+.syca-group-chip.active {
+  background: var(--bg-accent-light);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.syca-group-count {
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+.syca-group-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  gap: 8px;
+}
+
+.syca-group-input {
+  width: 100%;
+  min-width: 0;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover-light);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.syca-group-input:focus {
+  border-color: var(--primary-color);
+}
+
+.syca-group-btn {
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-hover-light);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.18s ease;
+}
+
+.syca-group-btn:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.syca-group-btn.primary {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--text-white);
+}
+
+.syca-group-btn.primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: var(--text-white);
+}
+
+.syca-group-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.clipboard-item[data-syca-hidden='true'] {
+  display: none !important;
+}
+
+.syca-group-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg-accent-light);
+  color: var(--primary-color);
+  font-size: 11px;
+  font-weight: 600;
+}
