@@ -193,5 +193,14 @@ window.ztools.registerTool('search_history', async (params = {}) => {
 // 局域网接收功能
 window.ztools.remote = {
     getHttpConfig: () => electron.ipcRenderer.invoke('plugin.api', 'http:getConfig'),
-    getHttpServerInfo: () => electron.ipcRenderer.invoke('plugin.api', 'http:getServerInfo')
+    getHttpServerInfo: () => electron.ipcRenderer.invoke('plugin.api', 'http:getServerInfo'),
+    onReceived: (callback) => {
+        console.log('[Sycaclip Preload] 注册 remote-clipboard-received 监听器');
+        const listener = (event, data) => {
+            console.log('[Sycaclip Preload] 收到 remote-clipboard-received 事件:', data);
+            callback(data);
+        };
+        electron.ipcRenderer.on('remote-clipboard-received', listener);
+        return () => electron.ipcRenderer.removeListener('remote-clipboard-received', listener);
+    }
 };

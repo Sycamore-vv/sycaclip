@@ -1026,7 +1026,7 @@ onUnmounted(() => {
         :favorite-count="favorites.length"
         @update:active-tab="activeTab = $event"
       />
-      <div class="group-panel">
+      <div v-if="activeTab !== 'remote'" class="group-panel">
         <div class="group-chip-row">
           <div class="chip-scroll">
             <button
@@ -1157,6 +1157,7 @@ onUnmounted(() => {
     </div>
 
     <SideBar
+      v-if="activeTab !== 'remote'"
       :can-move-group="selectedIds.length > 0"
       :group-tools-open="showGroupTools"
       @copy="copySelected"

@@ -1,8 +1,8 @@
 {
   "name": "Sycaclip",
   "author": "Sycamore",
-  "description": "Sycaclip",
-  "version": "1.2.4",
+  "description": "剪贴板历史与远程剪贴板",
+  "version": "1.2.6",
   "main": "index.html",
   "preload": "preload.js",
   "logo": "logo.png",
